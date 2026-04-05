@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sansão & Pompom: A Caçada Pixelada</title>
+    <title>Sansão & Pompom: A Caçada</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; user-select: none; }
         
         body {
             font-family: 'Press Start 2P', cursive;
-            background-color: #2c1626; /* Fundo escuro retro */
-            color: #ffffff;
+            background-color: #d4a373; /* Cor da parede de fundo */
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -19,338 +18,317 @@
             flex-direction: column;
             height: 100vh;
             touch-action: manipulation;
-            image-rendering: pixelated; /* Força o visual quadriculado */
         }
 
-        /* Interface Superior (Placar e Tempo) */
-        #ui-layer {
-            padding: 15px;
-            background: #180c14;
+        /* --- UI BAR (Barra Superior) --- */
+        #ui-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.7rem;
+            padding: 15px 10px;
+            background-color: transparent;
             z-index: 10;
-            border-bottom: 4px solid #4a2540;
         }
 
-        .score-board { color: #f1c40f; }
-        .timer-board { color: #e74c3c; }
-
-        .cat-icon-ui {
-            width: 20px; height: 20px;
-            vertical-align: middle;
-            margin-right: 5px;
+        .ui-element {
+            background-color: #5d4037;
+            border: 3px solid #3e2723;
+            border-radius: 8px;
+            padding: 8px 10px;
+            color: #fff;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 0 #3e2723;
         }
 
-        /* Tabuleiro do Jogo */
+        .hearts { font-size: 1rem; letter-spacing: -2px; color: #e74c3c; }
+        .score-text { color: #81d4fa; }
+        .time-text { color: #fff; }
+
+        /* --- BANNER CENTRAL --- */
+        #banner-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            z-index: 10;
+        }
+
+        #banner {
+            background-color: #6a1b9a; /* Roxo da imagem */
+            border: 4px solid #f1c40f; /* Borda amarela */
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #f1c40f;
+            text-align: center;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        /* --- ÁREA DO JOGO E PRATELEIRAS --- */
         #game-board {
             flex-grow: 1;
             position: relative;
-            background-color: #795548; /* Cor de piso de madeira retro */
-            background-image: linear-gradient(45deg, #6d4c41 25%, transparent 25%, transparent 75%, #6d4c41 75%, #6d4c41), linear-gradient(45deg, #6d4c41 25%, transparent 25%, transparent 75%, #6d4c41 75%, #6d4c41);
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
             overflow: hidden;
-            border-top: 4px solid #3e2723;
         }
 
-        /* O Ratinho Pixelado */
+        .shelf {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background-color: #8d6e63;
+            border-top: 4px solid #a1887f;
+            border-bottom: 4px solid #5d4037;
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Posição das 3 prateleiras */
+        #shelf-1 { top: 25%; }
+        #shelf-2 { top: 55%; }
+        #shelf-3 { top: 85%; }
+
+        /* --- O RATINHO --- */
         .mouse {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            cursor: crosshair;
-            animation: popIn 0.2s steps(4) forwards; /* Animação em quadros estilo retro */
+            align-items: flex-end;
+            cursor: pointer;
+            z-index: 5;
         }
 
         .mouse svg {
-            width: 50px; height: 50px;
-            filter: drop-shadow(0px 4px 0px rgba(0,0,0,0.4));
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0px 4px 0px rgba(0,0,0,0.3));
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
+        /* Animação de correr da esquerda para a direita */
+        @keyframes runRight {
+            0% { transform: translateX(-60px); }
+            100% { transform: translateX(110vw); }
+        }
+        
+        /* Animação de correr da direita para a esquerda */
+        @keyframes runLeft {
+            0% { transform: translateX(110vw) scaleX(-1); }
+            100% { transform: translateX(-60px) scaleX(-1); }
         }
 
-        /* Telas de Menu */
-        .screen {
+        /* --- TELAS DE INÍCIO E FIM --- */
+        .screen-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(24, 12, 20, 0.95);
+            background: rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 20;
-            text-align: center;
-            padding: 20px;
+            z-index: 50;
         }
 
-        h1 { color: #f1c40f; font-size: 1.5rem; margin-bottom: 10px; text-shadow: 3px 3px 0px #d35400; line-height: 1.5; }
-        h2 { font-size: 0.8rem; margin-bottom: 30px; line-height: 1.5; color: #bdc3c7;}
-
-        .btn {
-            background: #2c3e50;
-            color: white;
-            border: 4px solid #fff;
-            padding: 15px 20px;
-            font-size: 0.8rem;
+        .btn-start {
+            background-color: #f1c40f;
+            color: #000;
+            border: 4px solid #e67e22;
+            padding: 15px 30px;
             font-family: inherit;
-            margin: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 6px 0 #000;
-            transition: transform 0.1s, box-shadow 0.1s;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 6px 0 #d35400;
         }
-
-        .btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 0 0 #000;
-        }
-
-        .btn-sansao { background: #2c3e50; border-color: #3498db; }
-        .btn-pompom { background: #2c3e50; border-color: #9b59b6; }
-
+        .btn-start:active { transform: translateY(6px); box-shadow: none; }
         .hidden { display: none !important; }
-        
-        #hunter-name { color: #fff; }
+
     </style>
 </head>
 <body>
 
     <svg style="display: none;">
         <g id="rat-pixel">
-            <rect x="2" y="5" width="6" height="3" fill="#95a5a6"/> <rect x="8" y="6" width="1" height="1" fill="#000"/>     <rect x="7" y="4" width="2" height="2" fill="#bdc3c7"/> <rect x="6" y="3" width="1" height="1" fill="#FFB6C1"/> <rect x="0" y="6" width="2" height="1" fill="#FFB6C1"/> </g>
-        
-        <g id="sansao-pixel">
-            <rect x="1" y="0" width="2" height="2" fill="#111"/> <rect x="7" y="0" width="2" height="2" fill="#111"/> <rect x="1" y="2" width="8" height="6" fill="#111"/> <rect x="2" y="4" width="2" height="2" fill="#FFD700"/> <rect x="6" y="4" width="2" height="2" fill="#FFD700"/> <rect x="4" y="6" width="2" height="1" fill="#333"/> </g>
-
-        <g id="pompom-pixel">
-            <rect x="1" y="0" width="2" height="2" fill="#8B4513"/> <rect x="7" y="0" width="2" height="2" fill="#8B4513"/> <rect x="1" y="2" width="8" height="3" fill="#8B4513"/> <rect x="2" y="2" width="1" height="1" fill="#111"/> <rect x="5" y="2" width="1" height="1" fill="#111"/> <rect x="7" y="2" width="1" height="1" fill="#111"/> <rect x="1" y="5" width="8" height="3" fill="#FFF"/> <rect x="2" y="4" width="2" height="2" fill="#2ecc71"/> <rect x="6" y="4" width="2" height="2" fill="#2ecc71"/> <rect x="4" y="6" width="2" height="1" fill="#FFB6C1"/> </g>
+            <rect x="2" y="5" width="6" height="3" fill="#7f8c8d"/>
+            <rect x="8" y="6" width="1" height="1" fill="#000"/>
+            <rect x="7" y="4" width="2" height="2" fill="#95a5a6"/>
+            <rect x="6" y="3" width="1" height="1" fill="#e74c3c"/>
+            <rect x="0" y="6" width="2" height="1" fill="#e74c3c"/>
+        </g>
     </svg>
 
-    <div id="ui-layer">
-        <div class="score-board">PTS:<span id="score">0</span></div>
-        <div>
-            <svg class="cat-icon-ui" viewBox="0 0 10 10" id="ui-cat-icon"><use href="#sansao-pixel"/></svg>
-            <span id="hunter-name">SANSÃO</span>
+    <div id="ui-bar">
+        <div class="ui-element">
+            🐱 <span class="hearts" id="hearts-display">❤️❤️❤️</span>
         </div>
-        <div class="timer-board">T:<span id="time">30</span></div>
+        <div class="ui-element">
+            🐟 <span class="score-text" id="score">000</span>
+        </div>
+        <div class="ui-element">
+            ⏱️ <span class="time-text" id="time">02:30</span>
+        </div>
     </div>
 
-    <div id="game-board"></div>
-
-    <div id="start-screen" class="screen">
-        <h1>A CAÇADA<br>16-BITS</h1>
-        <h2>ESCOLHA SEU FELINO</h2>
-        
-        <button class="btn btn-sansao" onclick="startGame('Sansão', '#sansao-pixel')">
-            <svg width="30" height="30" viewBox="0 0 10 10"><use href="#sansao-pixel"/></svg>
-            SANSÃO
-        </button>
-        
-        <button class="btn btn-pompom" onclick="startGame('Pompom', '#pompom-pixel')">
-            <svg width="30" height="30" viewBox="0 0 10 10"><use href="#pompom-pixel"/></svg>
-            POMPOM
-        </button>
-        
-        <p style="margin-top: 30px; font-size: 0.6rem; color: #7f8c8d; line-height: 1.5;">
-            * Aumente o volume!<br>Os sons atrairão os gatos reais.
-        </p>
+    <div id="banner-container">
+        <div id="banner">
+            SANSÃO E POMPOM:<br>A CAÇADA
+        </div>
     </div>
 
-    <div id="end-screen" class="screen hidden">
-        <h1 style="color: #e74c3c;">FIM DE JOGO</h1>
-        <h2><span id="final-hunter"></span> CAÇOU<br><span id="final-score" style="color: #f1c40f; font-size: 1.5rem;">0</span> RATOS</h2>
-        <button class="btn" style="justify-content: center; width: 200px;" onclick="resetGame()">REJOGAR</button>
+    <div id="game-board">
+        <div class="shelf" id="shelf-1"></div>
+        <div class="shelf" id="shelf-2"></div>
+        <div class="shelf" id="shelf-3"></div>
+    </div>
+
+    <div id="start-screen" class="screen-overlay">
+        <button class="btn-start" onclick="startGame()">▶ INICIAR CAÇADA</button>
+    </div>
+
+    <div id="end-screen" class="screen-overlay hidden">
+        <h2 style="color:#fff;">FIM DO TEMPO</h2>
+        <p style="color:#f1c40f; font-size:1.5rem;">SCORE: <span id="final-score">0</span></p>
+        <button class="btn-start" onclick="location.reload()">JOGAR NOVAMENTE</button>
     </div>
 
     <script>
-        // --- MOTOR DE ÁUDIO FELINO ---
+        // --- MOTOR BIOACÚSTICO ---
         let audioCtx;
-
         function initAudio() {
             if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
-        // Guincho agudo (captura)
         function playSqueak() {
             if (!audioCtx) return;
             const now = audioCtx.currentTime;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-
-            osc.type = 'square'; // Usando onda quadrada para soar mais como um "jogo retro" 8-bits
-            const baseFreq = 8000 + Math.random() * 2000; 
-            osc.frequency.setValueAtTime(baseFreq, now);
-            osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, now + 0.1);
-
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(8000, now);
+            osc.frequency.exponentialRampToValueAtTime(12000, now + 0.1);
             gain.gain.setValueAtTime(0, now);
             gain.gain.linearRampToValueAtTime(0.3, now + 0.02);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now);
-            osc.stop(now + 0.2);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(now); osc.stop(now + 0.2);
         }
 
-        // Rastejo (aparição)
         function playRustle() {
             if (!audioCtx) return;
             const now = audioCtx.currentTime;
             const bufferSize = audioCtx.sampleRate * 0.15;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
-
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.value = 6000; // Frequência alta para atrair gatos
-
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 6000;
             const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0, now);
-            gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.5, now + 0.05); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
             noise.start(now);
         }
 
         // --- LÓGICA DO JOGO ---
         let score = 0;
-        let timeLeft = 30;
-        let gameTimer;
-        let spawnTimer;
+        let totalSeconds = 150; // 02:30 em segundos
+        let gameTimer, spawnTimer;
         let isPlaying = false;
-        let board = document.getElementById('game-board');
+        const board = document.getElementById('game-board');
 
-        function startGame(hunterName, catSvgId) {
-            initAudio(); 
-            
-            // Atualiza a UI com o gato escolhido
-            document.getElementById('hunter-name').innerText = hunterName.toUpperCase();
-            document.getElementById('ui-cat-icon').innerHTML = `<use href="${catSvgId}"/>`;
-            
-            if (catSvgId === '#sansao-pixel') document.getElementById('hunter-name').style.color = '#3498db';
-            if (catSvgId === '#pompom-pixel') document.getElementById('hunter-name').style.color = '#9b59b6';
+        // Posição Y das prateleiras para o rato correr em cima delas
+        const shelfPositions = [25, 55, 85]; 
 
+        function formatTime(sec) {
+            let m = Math.floor(sec / 60);
+            let s = sec % 60;
+            return `0${m}:${s < 10 ? '0'+s : s}`;
+        }
+
+        function startGame() {
+            initAudio();
             document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('end-screen').classList.add('hidden');
-            
-            score = 0;
-            timeLeft = 30;
-            updateUI();
             isPlaying = true;
-
             gameTimer = setInterval(countdown, 1000);
             spawnMouse();
         }
 
         function countdown() {
-            timeLeft--;
-            updateUI();
-            if (timeLeft <= 0) {
-                endGame();
-            }
-        }
-
-        function updateUI() {
-            document.getElementById('score').innerText = score;
-            document.getElementById('time').innerText = timeLeft;
+            totalSeconds--;
+            document.getElementById('time').innerText = formatTime(totalSeconds);
+            if (totalSeconds <= 0) endGame();
         }
 
         function spawnMouse() {
             if (!isPlaying) return;
-
-            playRustle(); // Som de farfalhar
+            playRustle();
 
             const mouse = document.createElement('div');
             mouse.classList.add('mouse');
-            // Insere o SVG do ratinho
             mouse.innerHTML = '<svg viewBox="0 0 10 10"><use href="#rat-pixel"/></svg>';
+
+            // Escolhe uma prateleira aleatória
+            const randomShelf = shelfPositions[Math.floor(Math.random() * shelfPositions.length)];
+            // Ajusta o rato para ficar exatamente EM CIMA da linha da prateleira
+            mouse.style.top = `calc(${randomShelf}% - 48px)`; 
+
+            // Decide a direção (Esquerda para Direita ou Direita para Esquerda)
+            const goRight = Math.random() > 0.5;
             
-            const maxX = board.clientWidth - 60;
-            const maxY = board.clientHeight - 60;
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
+            // Define a velocidade da corrida (entre 1.5 e 3 segundos para atravessar a tela)
+            const speed = (1.5 + Math.random() * 1.5).toFixed(2);
 
-            mouse.style.left = `${randomX}px`;
-            mouse.style.top = `${randomY}px`;
+            if (goRight) {
+                mouse.style.animation = `runRight ${speed}s linear forwards`;
+            } else {
+                mouse.style.animation = `runLeft ${speed}s linear forwards`;
+            }
 
-            // Evento para toque mobile e mouse
+            // Eventos de toque
             mouse.addEventListener('touchstart', catchMouse, { passive: false });
             mouse.addEventListener('mousedown', catchMouse);
 
             board.appendChild(mouse);
 
-            // Tempo de vida do rato reduzido para ficar mais dinâmico
-            const aliveTime = 500 + Math.random() * 500;
-            
-            const deathTimer = setTimeout(() => {
-                if (board.contains(mouse)) {
-                    board.removeChild(mouse);
-                }
-            }, aliveTime);
+            // Remove o rato do HTML assim que a animação dele terminar
+            setTimeout(() => {
+                if (board.contains(mouse)) board.removeChild(mouse);
+            }, speed * 1000);
 
-            mouse.dataset.timerId = deathTimer;
-
-            // Próximo rato
-            const nextSpawn = 300 + Math.random() * 600;
-            spawnTimer = setTimeout(spawnMouse, nextSpawn);
+            // Próximo spawn mais rápido (entre 0.4 e 1.2 segundos)
+            spawnTimer = setTimeout(spawnMouse, 400 + Math.random() * 800);
         }
 
         function catchMouse(e) {
-            e.preventDefault(); 
-            const mouse = e.currentTarget; // Garante que pega o container div.mouse e não o SVG dentro
-            
+            e.preventDefault();
+            const mouse = e.currentTarget;
             if (!board.contains(mouse)) return;
 
-            playSqueak(); // Guincho de captura
-
-            clearTimeout(mouse.dataset.timerId);
+            playSqueak();
             board.removeChild(mouse);
             
             score += 10;
-            updateUI();
+            // Atualiza o placar mantendo 3 dígitos (ex: 010, 120)
+            document.getElementById('score').innerText = score.toString().padStart(3, '0');
 
-            // Efeito de flash na tela estilo arcade
-            board.style.backgroundColor = '#e74c3c';
-            setTimeout(() => { board.style.backgroundColor = ''; }, 50);
+            // Efeito de acerto no fundo
+            document.body.style.backgroundColor = '#e67e22';
+            setTimeout(() => { document.body.style.backgroundColor = '#d4a373'; }, 100);
         }
 
         function endGame() {
             isPlaying = false;
             clearInterval(gameTimer);
             clearTimeout(spawnTimer);
-            
             board.innerHTML = '';
-            
             document.getElementById('final-score').innerText = score;
-            document.getElementById('final-hunter').innerText = document.getElementById('hunter-name').innerText;
             document.getElementById('end-screen').classList.remove('hidden');
-        }
-
-        function resetGame() {
-            document.getElementById('end-screen').classList.add('hidden');
-            document.getElementById('start-screen').classList.remove('hidden');
         }
     </script>
 </body>
