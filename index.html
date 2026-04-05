@@ -355,7 +355,7 @@
             <div class="host-container">
                 <div class="host-avatar">👨🏽</div>
                 <div class="host-box" id="host-message">
-                    "A paz do Senhor, Ricardo! Olha pra mim... A passagem pra Curionópolis é sua! Vamos começar!"
+                    "A paz do Senhor! Olha pra mim... A passagem pra Curionópolis é sua! Vamos começar!"
                 </div>
             </div>
 
@@ -453,7 +453,7 @@
 
         const falasPastor = [
             "Pega esse código, igreja!",
-            "Receba essa sabedoria, Ricardo!",
+            "Receba essa sabedori!",
             "Fundamento puro! Aleluia!",
             "É Ano de Avivamento, varão! Certa resposta!"
         ];
@@ -486,7 +486,7 @@
 
                 if (tempoRestante === 10) {
                     document.getElementById('game-wrapper').classList.add('tela-tensao');
-                    document.getElementById('host-message').innerText = "Pastor André: 'Ricardo, irmão, o tempo tá acabando! Fogo no altar!'";
+                    document.getElementById('host-message').innerText = "Pastor André: irmão(ã), o tempo tá acabando! Fogo no altar!'";
                 }
 
                 if (tempoRestante <= 0) {
@@ -542,7 +542,7 @@
             });
 
             if (perguntaAtual === 0) {
-                document.getElementById('host-message').innerText = "Pastor André: 'A paz do Senhor, Ricardo! Escolheu bem a lição! Vamos ver se o fundamento tá firme.'";
+                document.getElementById('host-message').innerText = "Pastor André: 'A paz do Senhor! Escolheu bem a lição! Vamos ver se o fundamento tá firme.'";
             } else if (!document.getElementById('game-wrapper').classList.contains('tela-tensao')) {
                 document.getElementById('host-message').innerText = "Pastor André: 'Valendo! Cuidado com a pegadinha do inimigo!'";
             }
@@ -585,7 +585,7 @@
                 } else {
                     btnElement.classList.add('wrong');
                     document.getElementById(`opt-${correta}`).classList.add('correct');
-                    document.getElementById('host-message').innerText = "Pastor André: 'Misericórdia, Ricardo! Quebrou o avivamento! Perdeu a passagem pra Curionópolis!'";
+                    document.getElementById('host-message').innerText = "Pastor André: 'Misericórdia! Quebrou o avivamento! Perdeu a passagem pra Curionópolis!'";
                     setTimeout(() => finalizarJogo(false, "RESPOSTA ERRADA!"), 2500);
                 }
             }, 2500);
@@ -664,7 +664,7 @@
 
             if (venceu) {
                 document.getElementById('end-title').style.color = "var(--verde-avivamento)";
-                document.getElementById('end-msg').innerHTML = "Pastor André: 'ALELUIA, RICARDO! ZEROU A LIÇÃO! O nível Círculo de Oração tá no sangue! Sua mala tá pronta, <b>a passagem pra Curionópolis é 100% SUA!</b>'";
+                document.getElementById('end-msg').innerHTML = "Pastor André: 'ALELUIA! ZEROU A LIÇÃO! O nível Círculo de Oração tá no sangue! Sua mala tá pronta, <b>a passagem pra Curionópolis é 100% SUA!</b>'";
             } else {
                 document.getElementById('end-title').style.color = "var(--vermelho-alerta)";
                 let progresso = (perguntaAtual / perguntasAtuais.length) * 100;
