@@ -271,7 +271,7 @@
             </div>
 
             <div class="host-box" id="host-message">
-                Pastor André Fernandes: "A paz do Senhor! Vamos lá!"
+                Pastor André Fernandes: "A paz do Senhor, meu irmão! Glória a Deus por sua vida! Preparado pra subir o nível e ver se a Bíblia tá afiada? Vamos nessa!"
             </div>
 
             <div id="question">Carregando pergunta...</div>
@@ -286,7 +286,7 @@
 
         <div id="screen-end" class="screen">
             <div class="title-logo" id="end-title">FIM DE JOGO!</div>
-            <p id="end-msg" style="font-size: 14px; line-height: 1.5;">O culto acabou pra você!</p>
+            <p id="end-msg" style="font-size: 14px; line-height: 1.5;"></p>
             <div class="final-score"><span id="pontuacao-final">0</span> PTS</div>
             <p style="font-size: 10px; margin-bottom: 30px;" id="premio-final"></p>
             
@@ -383,7 +383,7 @@
                 optionsEl.appendChild(btn);
             });
 
-            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Valendo! O relógio está correndo!"';
+            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Direto de Parauapebas! Valeeeendo a passagem pra Curionópolis! Quem tá comigo?!"';
             iniciarTimer();
         }
 
@@ -405,7 +405,7 @@
                 placar += pontosGanhos;
                 document.getElementById('placar').innerText = placar;
 
-                document.getElementById('host-message').innerText = `Pastor André Fernandes: "Ceeeerta Resposta! Ganhou ${pontosGanhos} pontos pela rapidez!"`;
+                document.getElementById('host-message').innerText = `Pastor André Fernandes: "CEEEERTA RESPOSTA! Aleluia! Isso aí é fundamento puro! Já tô vendo a mala pronta pra Curionópolis!"`;
                 
                 perguntaAtual++;
                 setTimeout(carregarPergunta, 2500);
@@ -423,14 +423,14 @@
             
             const correta = perguntas[perguntaAtual].answer;
             const letra = correta + 1;
-            document.getElementById('host-message').innerText = `Pastor André Fernandes: "A galera do Solus Scriptura abriu as bíblias e falaram que é a opção ${letra}!"`;
+            document.getElementById('host-message').innerText = `Pastor André Fernandes: "Os universitários mais abençoados do Brasil! Os Alunos da Solus Scriptura já deram a call: Confia na número ${letra}, meu irmão!"`;
         }
 
         function usarPulo() {
             if (pulosRestantes > 0 && !aguardandoProxima) {
                 pulosRestantes--;
                 document.getElementById('qtd-pulos').innerText = pulosRestantes;
-                document.getElementById('host-message').innerText = 'Pastor André Fernandes: "PULOU! Vamos para a próxima e o relógio vai zerar!"';
+                document.getElementById('host-message').innerText = 'Pastor André Fernandes: "PULOU! É como diz o salmista: \'Pularia muros\'. Vamo pra próxima, mas ó, o tempo tá correndo!"';
                 
                 if (pulosRestantes === 0) document.getElementById('btn-pulo').disabled = true;
                 
@@ -458,7 +458,7 @@
                 }
             });
 
-            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Marcus da Mídia entrou em ação e cortou 2 alternativas erradas da tela!"';
+            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Chama o Marcus da Mídia! Ele vai usar a tesoura da edição e arrancar essas erradas pra você! Ó glória!"';
         }
 
         function finalizarJogo(venceu, motivo) {
@@ -469,10 +469,10 @@
             document.getElementById('pontuacao-final').innerText = placar;
 
             if (venceu) {
-                document.getElementById('end-msg').innerText = 'ALELUIA! Você provou que conhece a Palavra!';
+                document.getElementById('end-msg').innerText = 'Pastor André Fernandes: "Z-E-R-O-U O JOGO! Arrume suas malas! ALELUIA! Sua passagem pra Curionópolis está carimbada! Deus abençoe demais a sua jornada!"';
                 document.getElementById('premio-final').innerText = 'Prêmio garantido: 1 Passagem só de ida para Curionópolis!';
             } else {
-                document.getElementById('end-msg').innerText = 'Foi por pouco! Volte para a Escola Bíblica Dominical!';
+                document.getElementById('end-msg').innerText = 'Pastor André Fernandes: "Eita nois... Quebrou o avivamento! Mas calma, não desiste não! Volta pro culto de domingo pra estudar mais a Palavra!"';
                 document.getElementById('premio-final').innerText = 'Você perdeu a passagem para Curionópolis...';
             }
         }
