@@ -2,223 +2,319 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sintetizador Bioacústico Felino (Advanced DSP)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sansão & Pompom: A Caçada</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+        * { box-sizing: border-box; user-select: none; }
+        
         body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #0d1117;
-            color: #c9d1d9;
-            padding: 20px;
+            font-family: 'Fredoka One', cursive, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            touch-action: manipulation; /* Evita zoom no double tap */
+        }
+
+        #ui-layer {
+            padding: 15px;
+            background: #1a252f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .score-board { color: #f1c40f; }
+        .timer-board { color: #e74c3c; }
+
+        #game-board {
+            flex-grow: 1;
+            position: relative;
+            background: #27ae60;
+            overflow: hidden;
+            border-top: 4px solid #2ecc71;
+            cursor: crosshair;
+        }
+
+        /* Estilo do Ratinho */
+        .mouse {
+            position: absolute;
+            font-size: 3rem;
+            width: 60px;
+            height: 60px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            transition: transform 0.1s;
+            /* Animação de pulsar para chamar atenção */
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        .panel {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            padding: 25px;
-            border-radius: 6px;
-            width: 100%;
-            max-width: 600px;
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        h1 { font-size: 1.5em; border-bottom: 1px solid #30363d; padding-bottom: 10px; color: #58a6ff; }
-        .data-readout {
-            background: #000;
-            padding: 10px;
-            border: 1px solid #30363d;
-            font-size: 0.9em;
-            color: #3fb950;
-            margin-bottom: 20px;
-            border-radius: 4px;
+
+        /* Telas de Menu */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            text-align: center;
+            padding: 20px;
         }
+
+        h1 { color: #f1c40f; font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 0px #d35400; }
+        h2 { font-size: 1.5rem; margin-bottom: 30px; }
+
         .btn {
-            background-color: #238636;
+            background: #e67e22;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 15px 30px;
+            font-size: 1.5rem;
             font-family: inherit;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 6px;
-            width: 100%;
-            margin-bottom: 15px;
-            transition: background-color 0.2s;
+            border-radius: 30px;
+            margin: 10px;
+            box-shadow: 0 6px 0 #d35400;
+            transition: transform 0.1s, box-shadow 0.1s;
         }
-        .btn:hover { background-color: #2ea043; }
-        .btn.alarm { background-color: #da3633; }
-        .btn.alarm:hover { background-color: #f85149; }
-        .technical-note {
-            font-size: 0.8em;
-            color: #8b949e;
-            margin-top: 20px;
-            line-height: 1.5;
+
+        .btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #d35400;
         }
-        label { display: block; margin-top: 15px; font-weight: bold; }
-        input[type=range] { width: 100%; margin-top: 5px; }
+
+        .btn-sansao { background: #3498db; box-shadow: 0 6px 0 #2980b9; }
+        .btn-pompom { background: #9b59b6; box-shadow: 0 6px 0 #8e44ad; }
+
+        .hidden { display: none !important; }
+        
+        #hunter-name { color: #3498db; }
     </style>
 </head>
 <body>
 
-    <div class="panel">
-        <h1>Sintetizador Bioacústico - USV</h1>
-        
-        <div class="data-readout" id="sysData">
-            Status do Motor de Áudio: Aguardando Inicialização...<br>
-            Taxa de Amostragem (Sample Rate): N/A<br>
-            Limite de Nyquist (Freq. Máxima): N/A
-        </div>
+    <div id="ui-layer">
+        <div class="score-board">🐾 Pontos: <span id="score">0</span></div>
+        <div>🐱 <span id="hunter-name">Sansão</span></div>
+        <div class="timer-board">⏱ <span id="time">30</span>s</div>
+    </div>
 
-        <button class="btn alarm" onclick="playAlarmUSV()">Tocar USV de Alarme (Estress/Dor) ~ 22 kHz</button>
-        <button class="btn" onclick="playChirpUSV()">Tocar USV Social (Chirp) ~ 50 kHz</button>
-        <button class="btn" onclick="playBiologicalRustle()">Sintetizar Rastejo Biológico (Filtro Passa-Banda)</button>
+    <div id="game-board"></div>
 
-        <div class="technical-note">
-            <strong>Limitações de Hardware Físico:</strong><br>
-            A capacidade de reproduzir frequências acima de 20.000 Hz depende inteiramente do DAC (Conversor Digital-Analógico) da sua placa de som e do Tweeter (alto-falante) do seu dispositivo. Alto-falantes de smartphones geralmente não conseguem vibrar fisicamente a 50 kHz, mesmo que o software gere a onda perfeita. No entanto, os gatos podem reagir aos "artefatos de aliasing" (frequências fantasmas mais baixas) gerados pelos alto-falantes ao tentarem reproduzir esses sons.
-        </div>
+    <div id="start-screen" class="screen">
+        <h1>A Caçada!</h1>
+        <h2>Quem vai caçar hoje?</h2>
+        <button class="btn btn-sansao" onclick="startGame('Sansão')">Jogar com Sansão</button>
+        <button class="btn btn-pompom" onclick="startGame('Pompom')">Jogar com Pompom</button>
+        <p style="margin-top: 20px; font-size: 0.9rem; color: #bdc3c7;">
+            Aumente o volume! Os sons de alta frequência vão atrair os caçadores de verdade.
+        </p>
+    </div>
+
+    <div id="end-screen" class="screen hidden">
+        <h1>Fim de Jogo!</h1>
+        <h2><span id="final-hunter"></span> pegou <span id="final-score"></span> ratinhos!</h2>
+        <button class="btn" onclick="resetGame()">Jogar Novamente</button>
     </div>
 
     <script>
+        // --- MOTOR BIOACÚSTICO OTIMIZADO PARA MOBILE ---
         let audioCtx;
 
-        function initAudioEngine() {
+        function initAudio() {
             if (!audioCtx) {
-                // Tenta forçar uma taxa de amostragem de 96kHz ou 192kHz para suportar ultrassom
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
-                try {
-                    audioCtx = new AudioContext({ sampleRate: 192000 });
-                } catch (e) {
-                    audioCtx = new AudioContext(); // Fallback para o padrão do sistema (geralmente 44.1kHz ou 48kHz)
-                }
-                
-                const sampleRate = audioCtx.sampleRate;
-                const nyquist = sampleRate / 2;
-                
-                document.getElementById('sysData').innerHTML = `
-                    Status: <span style="color:#58a6ff;">Ativo</span><br>
-                    Taxa de Amostragem (Fs): ${sampleRate} Hz<br>
-                    Limite Teórico (Nyquist): ${nyquist} Hz
-                `;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
 
-        // 1. Chamado de Alarme (22 kHz) - Longo, com modulação (vibrato) de desespero
-        function playAlarmUSV() {
-            initAudioEngine();
+        // Toca um guincho agudo (audível para humanos, mas irresistível para gatos)
+        function playSqueak() {
+            if (!audioCtx) return;
             const now = audioCtx.currentTime;
-            
             const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            // LFO (Low Frequency Oscillator) para criar a textura áspera da corda vocal do roedor
-            const lfo = audioCtx.createOscillator();
-            const lfoGain = audioCtx.createGain();
-            
+            const gain = audioCtx.createGain();
+
             osc.type = 'sine';
-            lfo.type = 'sine';
-            
-            // Frequência base em 22 kHz (Típico de alarme em ratos)
-            osc.frequency.setValueAtTime(22000, now);
-            // Pequena queda de frequência no final do guincho (FM sweep)
-            osc.frequency.linearRampToValueAtTime(20000, now + 0.8);
+            // Frequência entre 10kHz e 14kHz para o celular conseguir reproduzir e você conseguir ouvir
+            const baseFreq = 10000 + Math.random() * 4000; 
+            osc.frequency.setValueAtTime(baseFreq, now);
+            osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, now + 0.1);
 
-            // Configuração do LFO (Modulação de Frequência)
-            lfo.frequency.value = 60; // 60 vibrações por segundo (Roughness)
-            lfoGain.gain.value = 300; // Profundidade da modulação (em Hz)
-            lfo.connect(lfoGain);
-            lfoGain.connect(osc.frequency); // Modula a frequência principal
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.5, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
 
-            // Envelope de Amplitude ADSR
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.8, now + 0.05); // Attack
-            gainNode.gain.setValueAtTime(0.8, now + 0.6); // Sustain
-            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.8); // Release
-
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
             osc.start(now);
-            lfo.start(now);
-            osc.stop(now + 0.9);
-            lfo.stop(now + 0.9);
+            osc.stop(now + 0.2);
         }
 
-        // 2. Chamado Social/Exploratório (50 kHz) - Muito curto, "gorjeio" rápido
-        function playChirpUSV() {
-            initAudioEngine();
+        // Toca o farfalhar de folhas rápido
+        function playRustle() {
+            if (!audioCtx) return;
             const now = audioCtx.currentTime;
-            
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            osc.type = 'sine';
-            
-            // Salto rápido de 40kHz para 55kHz em apenas 30 milissegundos
-            osc.frequency.setValueAtTime(40000, now);
-            osc.frequency.exponentialRampToValueAtTime(55000, now + 0.03);
-
-            // Envelope extremamente curto (Staccato)
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(1, now + 0.01);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            osc.start(now);
-            osc.stop(now + 0.05);
-        }
-
-        // 3. Rastejo Biológico (Ruído Rosa com Filtro Dinâmico)
-        function playBiologicalRustle() {
-            initAudioEngine();
-            const now = audioCtx.currentTime;
-            const duration = 0.6;
-            
-            // Gerador de Ruído
-            const bufferSize = audioCtx.sampleRate * duration;
+            const bufferSize = audioCtx.sampleRate * 0.2;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
-            
-            // Aproximação de Ruído Rosa (mais natural que ruído branco)
-            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-            for (let i = 0; i < bufferSize; i++) {
-                let white = Math.random() * 2 - 1;
-                b0 = 0.99886 * b0 + white * 0.0555179;
-                b1 = 0.99332 * b1 + white * 0.0750759;
-                b2 = 0.96900 * b2 + white * 0.1538520;
-                b3 = 0.86650 * b3 + white * 0.3104856;
-                b4 = 0.55000 * b4 + white * 0.5329522;
-                b5 = -0.7616 * b5 - white * 0.0168980;
-                data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
-                b6 = white * 0.115926;
-            }
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
 
-            const noiseSource = audioCtx.createBufferSource();
-            noiseSource.buffer = buffer;
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
 
-            // Filtro Passa-Banda (Simula a ressonância de folhas secas)
             const filter = audioCtx.createBiquadFilter();
-            filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(8000, now);
-            // Varia a frequência do filtro para simular o movimento
-            filter.frequency.exponentialRampToValueAtTime(14000, now + duration);
-            filter.Q.value = 1.5; // Qualidade da ressonância
+            filter.type = 'highpass';
+            filter.frequency.value = 8000;
 
-            // Envelope de Amplitude simulando "pisadas" rasgadas
-            const gainNode = audioCtx.createGain();
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
-            gainNode.gain.exponentialRampToValueAtTime(0.2, now + 0.15); // Pisada 1
-            gainNode.gain.linearRampToValueAtTime(0.8, now + 0.25); // Pisada 2
-            gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.8, now + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
 
-            noiseSource.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noise.start(now);
+        }
 
-            noiseSource.start(now);
+        // --- LÓGICA DO JOGO ---
+        let score = 0;
+        let timeLeft = 30;
+        let gameTimer;
+        let spawnTimer;
+        let isPlaying = false;
+        let board = document.getElementById('game-board');
+
+        function startGame(hunter) {
+            initAudio(); // Exige interação do usuário para ligar o áudio no mobile
+            
+            document.getElementById('hunter-name').innerText = hunter;
+            if (hunter === 'Sansão') document.getElementById('hunter-name').style.color = '#3498db';
+            if (hunter === 'Pompom') document.getElementById('hunter-name').style.color = '#9b59b6';
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            
+            score = 0;
+            timeLeft = 30;
+            updateUI();
+            isPlaying = true;
+
+            // Inicia os timers
+            gameTimer = setInterval(countdown, 1000);
+            spawnMouse();
+        }
+
+        function countdown() {
+            timeLeft--;
+            updateUI();
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('score').innerText = score;
+            document.getElementById('time').innerText = timeLeft;
+        }
+
+        function spawnMouse() {
+            if (!isPlaying) return;
+
+            // Toca som de rastejo ao aparecer
+            playRustle();
+
+            const mouse = document.createElement('div');
+            mouse.classList.add('mouse');
+            mouse.innerHTML = '🐁';
+            
+            // Posição aleatória considerando o tamanho do rato (60px)
+            const maxX = board.clientWidth - 60;
+            const maxY = board.clientHeight - 60;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            mouse.style.left = `${randomX}px`;
+            mouse.style.top = `${randomY}px`;
+
+            // Evento de toque (otimizado para mobile)
+            mouse.addEventListener('touchstart', catchMouse, { passive: false });
+            mouse.addEventListener('mousedown', catchMouse);
+
+            board.appendChild(mouse);
+
+            // O rato some depois de um tempo aleatório (0.6s a 1.2s)
+            const aliveTime = 600 + Math.random() * 600;
+            
+            const deathTimer = setTimeout(() => {
+                if (board.contains(mouse)) {
+                    board.removeChild(mouse);
+                }
+            }, aliveTime);
+
+            mouse.dataset.timerId = deathTimer;
+
+            // Próximo rato aparece rápido
+            const nextSpawn = 400 + Math.random() * 500;
+            spawnTimer = setTimeout(spawnMouse, nextSpawn);
+        }
+
+        function catchMouse(e) {
+            e.preventDefault(); // Evita scroll acidental no celular
+            const mouse = e.target;
+            
+            if (!board.contains(mouse)) return;
+
+            // Toca o guincho de captura
+            playSqueak();
+
+            clearTimeout(mouse.dataset.timerId);
+            board.removeChild(mouse);
+            
+            score += 10;
+            updateUI();
+
+            // Feedback visual rápido
+            board.style.backgroundColor = '#2ecc71';
+            setTimeout(() => { board.style.backgroundColor = '#27ae60'; }, 100);
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameTimer);
+            clearTimeout(spawnTimer);
+            
+            // Limpa o tabuleiro
+            board.innerHTML = '';
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-hunter').innerText = document.getElementById('hunter-name').innerText;
+            document.getElementById('end-screen').classList.remove('hidden');
+        }
+
+        function resetGame() {
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
         }
     </script>
 </body>
