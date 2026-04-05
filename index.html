@@ -7,18 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --azul-fundo: #000033;
-            --azul-painel: #000080;
-            --amarelo: #FFD700;
-            --vermelho: #FF0000;
-            --verde: #00FF00;
-            --branco: #FFFFFF;
+            /* NOVA PALETA DE CORES DA IGREJA */
+            --marrom-fundo: #4e342e; /* Madeira profunda */
+            --marrom-painel: #5d4037; /* Púlpito e tábuas */
+            --dourado-brilhante: #ffd600; /* Luz e divino */
+            --dourado-soft: #ffc107; /* Ouro âmbar */
+            --vermelho-rubi: #8e0000; /* Sacrifício e vitrais */
+            --pergaminho: #ffecb3; /* Fundo para leitura */
+            --branco: #f5f5f5;
+            --preto: #000000;
         }
 
         body {
             font-family: 'Press Start 2P', cursive;
-            background-color: var(--azul-fundo);
-            color: var(--amarelo);
+            background-color: var(--marrom-fundo);
+            color: var(--dourado-brilhante);
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -28,19 +31,22 @@
         #game-wrapper {
             max-width: 800px;
             margin: 0 auto;
-            border: 6px solid var(--amarelo);
-            background-color: var(--azul-painel);
-            box-shadow: 0 0 20px var(--amarelo), inset 0 0 20px #000;
+            border: 8px solid var(--dourado-brilhante);
+            background-color: var(--marrom-painel);
+            box-shadow: 0 0 25px var(--dourado-brilhante), inset 0 0 15px #000;
             position: relative;
-            min-height: 600px;
+            min-height: 650px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: start; /* Organiza de cima pra baixo */
+            padding-top: 20px;
+            /* ADICIONANDO UM TOQUE DE VITRAL NAS BORDAS */
+            border-image: linear-gradient(to bottom, var(--dourado-brilhante), var(--vermelho-rubi), var(--dourado-soft)) 1;
         }
 
         .screen {
             display: none;
-            padding: 30px;
+            padding: 20px 30px;
             animation: fadeIn 0.5s ease-in;
         }
 
@@ -56,7 +62,7 @@
         /* --- TELA INICIAL --- */
         .title-logo {
             font-size: 32px;
-            color: var(--amarelo);
+            color: var(--dourado-brilhante);
             text-shadow: 4px 4px 0 #000;
             margin-bottom: 20px;
             line-height: 1.5;
@@ -65,12 +71,12 @@
 
         @keyframes pulse {
             0% { transform: scale(1); text-shadow: 4px 4px 0 #000; }
-            50% { transform: scale(1.05); text-shadow: 4px 4px 20px var(--amarelo); }
+            50% { transform: scale(1.03); text-shadow: 4px 4px 20px var(--dourado-brilhante); }
             100% { transform: scale(1); text-shadow: 4px 4px 0 #000; }
         }
 
         .btn-start, .btn-share {
-            background-color: var(--verde);
+            background-color: var(--dourado-soft);
             color: #000;
             border: 4px solid var(--branco);
             padding: 20px 40px;
@@ -83,7 +89,7 @@
         }
 
         .btn-start:hover, .btn-share:hover {
-            background-color: var(--amarelo);
+            background-color: var(--dourado-brilhante);
             transform: translate(-2px, -2px);
             box-shadow: 7px 7px 0 #000;
         }
@@ -93,16 +99,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #000;
+            background-color: var(--preto);
             padding: 10px 20px;
-            border-bottom: 4px solid var(--amarelo);
+            border-bottom: 4px solid var(--dourado-brilhante);
             margin-top: -30px;
             margin-bottom: 20px;
         }
 
         .score-display {
             font-size: 14px;
-            color: var(--verde);
+            color: var(--dourado-brilhante);
         }
 
         .timer-container {
@@ -115,7 +121,7 @@
 
         #timer-bar {
             height: 100%;
-            background-color: var(--verde);
+            background-color: var(--dourado-brilhante);
             width: 100%;
             transition: width 1s linear, background-color 0.5s;
         }
@@ -130,35 +136,33 @@
             text-shadow: 1px 1px 0 #000;
         }
 
-        /* --- MENSAGEM DO PASTOR --- */
+        /* --- MENSAGEM DO PASTOR (LAYOUT FOCADO NA LEITURA CALMA) --- */
         .host-box {
-            background-color: var(--branco);
-            color: #000;
-            padding: 15px;
+            background-color: var(--pergaminho);
+            color: var(--preto); /* Fonte escura para leitura */
+            padding: 20px 25px;
             border-radius: 10px;
-            border: 4px solid #000;
-            margin-bottom: 20px;
+            border: 6px solid #000;
+            margin-bottom: 30px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
             position: relative;
-        }
-        .host-box::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            border-width: 15px 15px 0;
-            border-style: solid;
-            border-color: var(--branco) transparent transparent transparent;
-            transform: translateX(-50%);
+            /* EFEITO DE BORDA ESTILO PIXEL ART */
+            border-image: linear-gradient(to right, #000, #333) 1;
+            /* CENTRALIZAÇÃO NA TELA */
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 90%;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
         /* --- ÁREA DO QUIZ --- */
         #question {
             font-size: 16px;
-            margin: 30px 0;
+            margin: 20px 0;
             color: var(--branco);
             text-shadow: 2px 2px 0 #000;
+            font-weight: bold;
         }
 
         .btn-container {
@@ -166,11 +170,14 @@
             flex-direction: column;
             gap: 15px;
             margin-bottom: 30px;
+            max-width: 95%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn-resp {
-            background-color: var(--azul-fundo);
-            color: var(--branco);
+            background-color: var(--marrom- painel);
+            color: var(--dourado-soft);
             border: 2px solid var(--branco);
             padding: 15px;
             font-family: 'Press Start 2P', cursive;
@@ -182,9 +189,10 @@
         }
 
         .btn-resp:hover:not(:disabled) {
-            background-color: var(--amarelo);
+            background-color: var(--dourado-soft);
             color: #000;
             transform: scale(1.02);
+            box-shadow: 5px 5px 0 #000;
         }
 
         .btn-resp:disabled {
@@ -193,13 +201,13 @@
         }
 
         .btn-resp.correct {
-            background-color: var(--verde) !important;
+            background-color: #00c853 !important; /* Verde brilhante de acerto */
             color: #000 !important;
             animation: blink 0.3s 3;
         }
 
         .btn-resp.wrong {
-            background-color: var(--vermelho) !important;
+            background-color: var(--vermelho-rubi) !important;
             color: var(--branco) !important;
         }
 
@@ -213,14 +221,14 @@
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
-            border-top: 2px dashed var(--amarelo);
+            border-top: 2px dashed var(--dourado-brilhante);
             padding-top: 20px;
         }
 
         .btn-help {
-            background-color: #8B0000;
+            background-color: var(--vermelho-rubi);
             color: var(--branco);
-            border: 2px solid var(--amarelo);
+            border: 2px solid var(--dourado-brilhante);
             padding: 10px;
             font-family: 'Press Start 2P', cursive;
             font-size: 9px;
@@ -230,7 +238,7 @@
         }
 
         .btn-help:hover:not(:disabled) {
-            background-color: var(--vermelho);
+            background-color: #d50000;
             transform: translateY(-2px);
         }
 
@@ -244,7 +252,7 @@
         /* --- TELA FINAL --- */
         .final-score {
             font-size: 40px;
-            color: var(--verde);
+            color: var(--dourado-brilhante);
             margin: 30px 0;
             text-shadow: 3px 3px 0 #000;
         }
@@ -256,7 +264,7 @@
         
         <div id="screen-start" class="screen active">
             <div class="title-logo">SHOW DO MILHÃO<br>CRENTE</div>
-            <p style="color: var(--verde); font-size: 12px; margin-bottom: 40px;">Valendo uma passagem só de ida para Curionópolis!</p>
+            <p style="color: var(--dourado-brilhante); font-size: 12px; margin-bottom: 40px;">Valendo uma passagem só de ida para Curionópolis!</p>
             <p style="font-size: 10px; line-height: 1.8;">Responda rápido para ganhar MAIS PONTOS!<br>Você tem 30 segundos por pergunta.</p>
             <button class="btn-start" onclick="iniciarJogo()">COMEÇAR JOGO</button>
         </div>
@@ -354,11 +362,11 @@
             texto.innerText = `${tempoRestante}s`;
 
             if (tempoRestante <= 10) {
-                barra.style.backgroundColor = 'var(--vermelho)';
+                barra.style.backgroundColor = 'var(--vermelho-rubi)';
             } else if (tempoRestante <= 20) {
-                barra.style.backgroundColor = 'var(--amarelo)';
+                barra.style.backgroundColor = 'var(--dourado-soft)';
             } else {
-                barra.style.backgroundColor = 'var(--verde)';
+                barra.style.backgroundColor = 'var(--dourado-brilhante)';
             }
         }
 
