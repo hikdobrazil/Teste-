@@ -3,166 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste de Instinto Felino</title>
+    <title>Sintetizador Bioacústico Felino (Advanced DSP)</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a2e;
-            color: #e94560;
-            text-align: center;
-            padding: 40px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            padding: 20px;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
         }
-        .container {
-            background-color: #16213e;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            max-width: 500px;
+        .panel {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            padding: 25px;
+            border-radius: 6px;
             width: 100%;
+            max-width: 600px;
         }
-        h1 { margin-top: 0; }
-        p.subtitle { color: #a2a2bd; margin-bottom: 30px; }
-        
-        .control-group {
-            margin: 25px 0;
-            background: #0f3460;
-            padding: 20px;
-            border-radius: 8px;
+        h1 { font-size: 1.5em; border-bottom: 1px solid #30363d; padding-bottom: 10px; color: #58a6ff; }
+        .data-readout {
+            background: #000;
+            padding: 10px;
+            border: 1px solid #30363d;
+            font-size: 0.9em;
+            color: #3fb950;
+            margin-bottom: 20px;
+            border-radius: 4px;
         }
-
-        input[type=range] {
-            width: 100%;
-            cursor: pointer;
-            margin: 15px 0;
-        }
-
-        .freq-display {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        button {
-            background-color: #e94560;
+        .btn {
+            background-color: #238636;
             color: white;
             border: none;
-            padding: 15px 20px;
-            margin: 10px 5px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            padding: 12px;
+            font-family: inherit;
             font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
             width: 100%;
+            margin-bottom: 15px;
+            transition: background-color 0.2s;
         }
-
-        button:hover { background-color: #d1304b; }
-        button:active { transform: scale(0.98); }
-        
-        .note {
-            font-size: 0.85em;
-            color: #8b8ba7;
+        .btn:hover { background-color: #2ea043; }
+        .btn.alarm { background-color: #da3633; }
+        .btn.alarm:hover { background-color: #f85149; }
+        .technical-note {
+            font-size: 0.8em;
+            color: #8b949e;
             margin-top: 20px;
+            line-height: 1.5;
         }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input[type=range] { width: 100%; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Sintetizador de Presas</h1>
-        <p class="subtitle">Ajuste as frequências e veja se o Sansão ou o Pompom entram em "modo de caça".</p>
-
-        <div class="control-group">
-            <label for="freqSlider" style="color: #fff;">Frequência do Guincho (Hertz):</label><br>
-            <input type="range" id="freqSlider" min="10000" max="24000" step="500" value="15000" oninput="updateFreqDisplay()">
-            <div class="freq-display"><span id="freqValue">15000</span> Hz</div>
+    <div class="panel">
+        <h1>Sintetizador Bioacústico - USV</h1>
+        
+        <div class="data-readout" id="sysData">
+            Status do Motor de Áudio: Aguardando Inicialização...<br>
+            Taxa de Amostragem (Sample Rate): N/A<br>
+            Limite de Nyquist (Freq. Máxima): N/A
         </div>
 
-        <button onclick="playSqueak()">🐁 Tocar Guincho de Rato</button>
-        <button onclick="playRustle()">🍃 Tocar Som de Rastejo (Folhas)</button>
-        
-        <p class="note">
-            * Nota: O ouvido humano adulto geralmente para de escutar entre 15.000 Hz e 17.000 Hz. 
-            Se você colocar acima disso e não ouvir nada, os gatos provavelmente ainda estarão ouvindo (dependendo da potência dos alto-falantes do seu aparelho).
-        </p>
+        <button class="btn alarm" onclick="playAlarmUSV()">Tocar USV de Alarme (Estress/Dor) ~ 22 kHz</button>
+        <button class="btn" onclick="playChirpUSV()">Tocar USV Social (Chirp) ~ 50 kHz</button>
+        <button class="btn" onclick="playBiologicalRustle()">Sintetizar Rastejo Biológico (Filtro Passa-Banda)</button>
+
+        <div class="technical-note">
+            <strong>Limitações de Hardware Físico:</strong><br>
+            A capacidade de reproduzir frequências acima de 20.000 Hz depende inteiramente do DAC (Conversor Digital-Analógico) da sua placa de som e do Tweeter (alto-falante) do seu dispositivo. Alto-falantes de smartphones geralmente não conseguem vibrar fisicamente a 50 kHz, mesmo que o software gere a onda perfeita. No entanto, os gatos podem reagir aos "artefatos de aliasing" (frequências fantasmas mais baixas) gerados pelos alto-falantes ao tentarem reproduzir esses sons.
+        </div>
     </div>
 
     <script>
         let audioCtx;
 
-        // Inicializa o contexto de áudio (necessário fazer isso após um clique do usuário por regras de segurança do navegador)
-        function initAudio() {
+        function initAudioEngine() {
             if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                // Tenta forçar uma taxa de amostragem de 96kHz ou 192kHz para suportar ultrassom
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                try {
+                    audioCtx = new AudioContext({ sampleRate: 192000 });
+                } catch (e) {
+                    audioCtx = new AudioContext(); // Fallback para o padrão do sistema (geralmente 44.1kHz ou 48kHz)
+                }
+                
+                const sampleRate = audioCtx.sampleRate;
+                const nyquist = sampleRate / 2;
+                
+                document.getElementById('sysData').innerHTML = `
+                    Status: <span style="color:#58a6ff;">Ativo</span><br>
+                    Taxa de Amostragem (Fs): ${sampleRate} Hz<br>
+                    Limite Teórico (Nyquist): ${nyquist} Hz
+                `;
             }
         }
 
-        function updateFreqDisplay() {
-            document.getElementById('freqValue').innerText = document.getElementById('freqSlider').value;
-        }
-
-        // Gera o "guincho" de um rato usando um Oscilador
-        function playSqueak() {
-            initAudio();
-            const freq = parseFloat(document.getElementById('freqSlider').value);
+        // 1. Chamado de Alarme (22 kHz) - Longo, com modulação (vibrato) de desespero
+        function playAlarmUSV() {
+            initAudioEngine();
+            const now = audioCtx.currentTime;
             
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-
-            osc.type = 'sine'; // Onda senoidal gera um som limpo, parecido com um assobio agudo
             
-            // Simula o formato de um guincho (aumenta a frequência rapidamente)
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 0.1);
+            // LFO (Low Frequency Oscillator) para criar a textura áspera da corda vocal do roedor
+            const lfo = audioCtx.createOscillator();
+            const lfoGain = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            lfo.type = 'sine';
+            
+            // Frequência base em 22 kHz (Típico de alarme em ratos)
+            osc.frequency.setValueAtTime(22000, now);
+            // Pequena queda de frequência no final do guincho (FM sweep)
+            osc.frequency.linearRampToValueAtTime(20000, now + 0.8);
 
-            // Envelope de volume (começa alto e some rápido como um estalo/guincho)
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.02);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+            // Configuração do LFO (Modulação de Frequência)
+            lfo.frequency.value = 60; // 60 vibrações por segundo (Roughness)
+            lfoGain.gain.value = 300; // Profundidade da modulação (em Hz)
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency); // Modula a frequência principal
+
+            // Envelope de Amplitude ADSR
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.8, now + 0.05); // Attack
+            gainNode.gain.setValueAtTime(0.8, now + 0.6); // Sustain
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.8); // Release
 
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.2);
+            osc.start(now);
+            lfo.start(now);
+            osc.stop(now + 0.9);
+            lfo.stop(now + 0.9);
         }
 
-        // Gera o som de rastejo/folhas secas usando Ruído Branco filtrado
-        function playRustle() {
-            initAudio();
+        // 2. Chamado Social/Exploratório (50 kHz) - Muito curto, "gorjeio" rápido
+        function playChirpUSV() {
+            initAudioEngine();
+            const now = audioCtx.currentTime;
             
-            // Cria meio segundo de ruído branco (White Noise)
-            const bufferSize = audioCtx.sampleRate * 0.5;
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            
+            // Salto rápido de 40kHz para 55kHz em apenas 30 milissegundos
+            osc.frequency.setValueAtTime(40000, now);
+            osc.frequency.exponentialRampToValueAtTime(55000, now + 0.03);
+
+            // Envelope extremamente curto (Staccato)
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(1, now + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.05);
+        }
+
+        // 3. Rastejo Biológico (Ruído Rosa com Filtro Dinâmico)
+        function playBiologicalRustle() {
+            initAudioEngine();
+            const now = audioCtx.currentTime;
+            const duration = 0.6;
+            
+            // Gerador de Ruído
+            const bufferSize = audioCtx.sampleRate * duration;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
+            
+            // Aproximação de Ruído Rosa (mais natural que ruído branco)
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
             for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1; 
+                let white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+                b6 = white * 0.115926;
             }
 
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
+            const noiseSource = audioCtx.createBufferSource();
+            noiseSource.buffer = buffer;
 
-            // Usa um filtro passa-alta (Highpass) para cortar graves e deixar só o "pspsps" (frequências sibilantes)
+            // Filtro Passa-Banda (Simula a ressonância de folhas secas)
             const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.value = 10000; // Corta tudo abaixo de 10kHz
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(8000, now);
+            // Varia a frequência do filtro para simular o movimento
+            filter.frequency.exponentialRampToValueAtTime(14000, now + duration);
+            filter.Q.value = 1.5; // Qualidade da ressonância
 
-            // Envelope de volume simulando um "arranhão" rápido
+            // Envelope de Amplitude simulando "pisadas" rasgadas
             const gainNode = audioCtx.createGain();
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.05);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.2, now + 0.15); // Pisada 1
+            gainNode.gain.linearRampToValueAtTime(0.8, now + 0.25); // Pisada 2
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
-            noise.connect(filter);
+            noiseSource.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
-            noise.start();
+            noiseSource.start(now);
         }
     </script>
 </body>
