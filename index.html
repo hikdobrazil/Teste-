@@ -3,299 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show do Milhão Crente - UI Moderna</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Show do Milhão Crente - O Avivamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0033cc;
-            --secondary: #001a66;
-            --accent: #FFD700;
-            --accent-hover: #ffea00;
-            --success: #00e676;
-            --danger: #ff1744;
-            --text-light: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            /* PALETA ALEGRE E ENÉRGICA (IGREJA MÃE) */
+            --azul-congresso: #0044CC; /* Azul vibrante e alegre */
+            --azul-profundo: #002266;
+            --dourado-gloria: #FFD700;
+            --amarelo-sol: #FFE600;
+            --branco-paz: #FFFFFF;
+            --verde-avivamento: #00E676; /* Verde muito vibrante */
+            --vermelho-alerta: #FF1744;
+            --laranja-fogo: #FF9100;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            font-family: 'Press Start 2P', cursive;
+            background: radial-gradient(circle at center, var(--azul-congresso) 0%, var(--azul-profundo) 100%);
+            color: var(--branco-paz);
+            text-align: center;
+            margin: 0;
+            padding: 10px;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Glassmorphism Container */
         #game-wrapper {
-            width: 100%;
             max-width: 800px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            padding: 30px;
+            margin: 20px auto;
+            border: 8px solid var(--dourado-gloria);
+            background-color: rgba(0, 34, 102, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
             position: relative;
-            min-height: 600px;
+            min-height: 650px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            justify-content: start;
+            padding: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .screen {
             display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            height: 100%;
-            animation: fadeIn 0.4s ease-out forwards;
+            padding: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .screen.active {
-            display: flex;
+            display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* --- TELA INICIAL --- */
-        .badge {
-            background: rgba(255, 23, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-        }
-
-        h1.title {
+        /* --- TELA INICIAL BOMBÁSTICA --- */
+        .title-logo {
+            font-family: 'Montserrat', sans-serif; /* Fonte moderna e grossa para o título */
+            font-size: 45px;
             font-weight: 800;
-            font-size: 42px;
-            line-height: 1.2;
-            background: linear-gradient(to right, #FFD700, #FFA500);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
-        }
-
-        p.subtitle {
-            font-size: 16px;
-            color: #e0e0e0;
-            margin-bottom: 40px;
-            max-width: 80%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #000;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            transition: all 0.3s ease;
+            color: var(--dourado-gloria);
             text-transform: uppercase;
+            text-shadow: 4px 4px 0 var(--azul-profundo), 8px 8px 0px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            line-height: 1.1;
+            animation: float 3s ease-in-out infinite;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .btn-primary:active {
-            transform: translateY(1px);
-        }
-
-        /* --- UI DO JOGO --- */
-        .progress-container {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+        .sub-badge {
+            background-color: var(--vermelho-alerta);
+            color: var(--branco-paz);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
             margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(255,0,0,0.5);
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .btn-start, .btn-share {
+            background: linear-gradient(to bottom, var(--amarelo-sol), var(--laranja-fogo));
+            color: var(--azul-profundo);
+            border: 4px solid var(--branco-paz);
+            border-radius: 15px;
+            padding: 20px 40px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.1s;
+            box-shadow: 0 8px 0 var(--laranja-fogo), 0 15px 20px rgba(0,0,0,0.4);
+        }
+
+        .btn-start:active, .btn-share:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 var(--laranja-fogo);
+        }
+
+        /* --- HUD (Placar, Nível e Tempo) --- */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 2px solid var(--dourado-gloria);
+            margin-bottom: 20px;
+        }
+
+        .score-box {
+            font-size: 12px;
+            color: var(--verde-avivamento);
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .timer-container {
+            width: 150px;
+            height: 25px;
+            border: 3px solid var(--branco-paz);
+            border-radius: 15px;
+            background-color: #222;
+            position: relative;
             overflow: hidden;
         }
 
-        .progress-bar {
+        #timer-bar {
             height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: width 0.5s ease;
+            background-color: var(--verde-avivamento);
+            width: 100%;
+            transition: width 1s linear, background-color 0.5s;
         }
 
-        .header-stats {
+        #timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: var(--branco-paz);
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* --- MENSAGEM DO PASTOR (O PSICOLÓGICO) --- */
+        .host-container {
             display: flex;
-            justify-content: space-between;
-            width: 100%;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 20px;
-            font-weight: 600;
-            font-size: 14px;
         }
 
-        .score { color: var(--success); }
-        .timer {
-            background: rgba(0,0,0,0.3);
-            padding: 5px 15px;
-            border-radius: 15px;
-            color: var(--accent);
-            border: 1px solid var(--glass-border);
-            min-width: 60px;
+        .host-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: var(--dourado-gloria);
+            border-radius: 50%;
+            border: 3px solid var(--branco-paz);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
         }
 
-        /* Mensagem do Pastor */
-        .host-card {
-            background: var(--text-light);
-            color: var(--secondary);
+        .host-box {
+            background-color: var(--branco-paz);
+            color: var(--azul-profundo);
             padding: 15px 20px;
-            border-radius: 0 20px 20px 20px;
-            font-weight: 600;
-            font-size: 14px;
+            border-radius: 15px 15px 15px 0;
+            border: 4px solid var(--dourado-gloria);
+            font-size: 12px;
+            line-height: 1.6;
+            flex-grow: 1;
             text-align: left;
-            width: 100%;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
         }
 
-        .host-card::before {
-            content: "Pastor André:";
-            display: block;
+        /* --- ÁREA DO QUIZ --- */
+        #question-label {
+            color: var(--dourado-gloria);
             font-size: 10px;
-            color: #666;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            margin-bottom: 5px;
-            font-weight: 800;
         }
 
-        .question-text {
-            font-size: 20px;
+        #question {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
             font-weight: 800;
-            margin-bottom: 25px;
-            width: 100%;
-            line-height: 1.4;
+            margin: 10px 0 30px 0;
+            color: var(--branco-paz);
+            text-shadow: 2px 2px 4px #000;
         }
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
+        .btn-container {
+            display: flex;
+            flex-direction: column;
             gap: 12px;
-            width: 100%;
             margin-bottom: 30px;
         }
 
-        .btn-option {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
-            padding: 16px 20px;
-            border-radius: 12px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 15px;
-            text-align: left;
+        .btn-resp {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--branco-paz);
+            border: 2px solid var(--dourado-gloria);
+            border-radius: 10px;
+            padding: 18px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            text-align: left;
+            transition: all 0.2s;
+            position: relative;
         }
 
-        .btn-option:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--accent);
-            transform: translateX(5px);
+        .btn-resp:hover:not(:disabled) {
+            background-color: var(--dourado-gloria);
+            color: var(--azul-profundo);
+            transform: scale(1.02) translateX(10px);
         }
 
-        .btn-option:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
+        /* ANIMAÇÃO DE SUSPENSE (Efeito Cassino) */
+        .btn-resp.suspense {
+            background-color: var(--laranja-fogo) !important;
+            color: var(--branco-paz) !important;
+            animation: suspenseBlink 0.2s infinite;
         }
 
-        /* Estados de Animação das Respostas */
-        .btn-option.suspense {
-            background: var(--accent) !important;
-            color: #000 !important;
-            animation: pulse-suspense 0.4s infinite alternate;
+        @keyframes suspenseBlink {
+            0% { opacity: 1; transform: scale(1.02); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.02); }
         }
 
-        @keyframes pulse-suspense {
-            from { transform: scale(1); }
-            to { transform: scale(1.02); box-shadow: 0 0 15px var(--accent); }
+        .btn-resp.correct {
+            background-color: var(--verde-avivamento) !important;
+            color: var(--azul-profundo) !important;
+            border-color: var(--branco-paz);
+            box-shadow: 0 0 20px var(--verde-avivamento);
+            animation: successPop 0.5s;
         }
 
-        .btn-option.correct {
-            background: var(--success) !important;
-            color: #000 !important;
-            border-color: var(--success) !important;
+        @keyframes successPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
-        .btn-option.wrong {
-            background: var(--danger) !important;
-            color: var(--text-light) !important;
-            border-color: var(--danger) !important;
+        .btn-resp.wrong {
+            background-color: var(--vermelho-alerta) !important;
+            color: var(--branco-paz) !important;
+            animation: shakeX 0.5s;
         }
 
-        .btn-option.hidden-by-marcus {
-            opacity: 0;
-            transform: scale(0.9);
-            pointer-events: none;
+        @keyframes shakeX {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
         }
 
-        /* Área de Ajudas */
-        .helps-container {
+        /* --- AJUDAS --- */
+        .helps {
             display: flex;
+            justify-content: space-between;
             gap: 10px;
-            width: 100%;
-            margin-top: auto;
+            margin-top: 10px;
+            border-top: 2px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
         }
 
         .btn-help {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            color: var(--accent);
+            background-color: rgba(0,0,0,0.4);
+            color: var(--dourado-gloria);
+            border: 2px solid var(--dourado-gloria);
+            border-radius: 8px;
             padding: 12px 5px;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 11px;
-            font-weight: 600;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
             cursor: pointer;
-            transition: 0.3s;
+            flex: 1;
+            transition: 0.2s;
+            text-transform: uppercase;
         }
 
         .btn-help:hover:not(:disabled) {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: var(--accent);
+            background-color: var(--dourado-gloria);
+            color: var(--azul-profundo);
+            transform: translateY(-3px);
         }
 
-        /* Tensão visual quando o tempo acaba */
-        .tension-mode {
-            box-shadow: inset 0 0 50px rgba(255, 23, 68, 0.4) !important;
+        .btn-help:disabled {
+            background-color: transparent;
+            color: #555;
+            border-color: #444;
+            cursor: not-allowed;
+            text-decoration: line-through;
         }
 
-        /* Responsividade */
-        @media (min-width: 600px) {
-            .options-grid { grid-template-columns: 1fr 1fr; }
-            h1.title { font-size: 54px; }
-            .btn-help { font-size: 13px; }
+        /* EFEITO TENSÃO NA TELA */
+        .tela-tensao {
+            box-shadow: inset 0 0 100px var(--vermelho-alerta) !important;
+            animation: heartBeat 1s infinite;
+        }
+        @keyframes heartBeat {
+            0%, 100% { box-shadow: inset 0 0 50px var(--vermelho-alerta); }
+            50% { box-shadow: inset 0 0 120px var(--vermelho-alerta); }
         }
     </style>
 </head>
@@ -304,300 +334,329 @@
     <div id="game-wrapper">
         
         <div id="screen-start" class="screen active">
-            <div class="badge">🔥 NOVO DESIGN | ANTI-BUG 🔥</div>
-            <h1 class="title">SHOW DO MILHÃO<br>CRENTE</h1>
-            <p class="subtitle">A passagem para Curionópolis já é sua. Responda rápido, ative os códigos e não deixe o inimigo roubar sua benção!</p>
-            <button class="btn-primary" onclick="startGame()">COMEÇAR JOGO</button>
+            <div class="sub-badge">🔥 VÁRIOS IRMÃOS JÁ JOGARAM HOJE!</div>
+            <div class="title-logo">SHOW DO MILHÃO<br>CRENTE</div>
+            <p style="color: var(--amarelo-sol); font-family: 'Montserrat'; font-size: 18px; font-weight: bold; margin-bottom: 20px;">Ano do Avivamento e do Fundamento!</p>
+            
+            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px dashed var(--dourado-gloria); font-size: 10px; line-height: 1.8;">
+                <span style="color: var(--verde-avivamento);">Sua passagem para Curionópolis JÁ ESTÁ COMPRADA!</span><br>
+                Responda as 15 perguntas para não deixar o inimigo roubar ela da sua mão!<br>
+                <span style="color: var(--vermelho-alerta);">Aviso: O tempo é curto e a glória é grande.</span>
+            </div>
+
+            <button class="btn-start" onclick="iniciarJogo()">PEGAR O VOO AGORA!</button>
         </div>
 
         <div id="screen-game" class="screen">
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            
-            <div class="header-stats">
-                <div class="score">PTS: <span id="placar">0</span></div>
-                <div class="timer" id="timer-display">30s</div>
-            </div>
-
-            <div class="host-card" id="host-message">
-                A paz do Senhor, igreja! Vamos testar se o fundamento tá firme. Concentração total!
+            <div class="hud">
+                <div class="score-box">CÓDIGOS: <span id="placar" style="font-size: 16px; color: var(--branco-paz);">0</span></div>
+                <div class="timer-container">
+                    <div id="timer-bar"></div>
+                    <div id="timer-text">30s</div>
+                </div>
             </div>
 
-            <div class="question-text" id="question">Carregando pergunta...</div>
-            
-            <div class="options-grid" id="options"></div>
+            <div class="host-container">
+                <div class="host-avatar">👨🏽</div>
+                <div class="host-box" id="host-message">
+                    "A paz do Senhor, igreja! Olha pra mim... A passagem é sua! Só precisamos testar se o fundamento tá na rocha. Vamos começar!"
+                </div>
+            </div>
 
-            <div class="helps-container">
-                <button class="btn-help" id="btn-alunos" onclick="useAlunos()">📚 Solus Scriptura</button>
-                <button class="btn-help" id="btn-pulo" onclick="usePulo()">⏭️ Pular (<span id="qtd-pulos">3</span>)</button>
-                <button class="btn-help" id="btn-marcus" onclick="useMarcus()">✂️ Marcus Mídia</button>
+            <div id="question-label">NÍVEL: BEBÊ NA FÉ (Pergunta 1/15)</div>
+            <div id="question">Carregando pergunta...</div>
+            <div class="btn-container" id="options"></div>
+
+            <div class="helps">
+                <button class="btn-help" id="btn-alunos" onclick="usarAlunos()">📚 Solus Scriptura</button>
+                <button class="btn-help" id="btn-pulo" onclick="usarPulo()">⏭️ Pular (<span id="qtd-pulos">3</span>)</button>
+                <button class="btn-help" id="btn-marcus" onclick="usarMarcus()">✂️ Marcus (Mídia)</button>
             </div>
         </div>
 
-        <div id="screen-end" class="screen">
-            <h1 class="title" id="end-title" style="font-size: 36px; margin-top: 20px;">FIM DE JOGO</h1>
-            <p class="subtitle" id="end-msg" style="color: #fff; font-weight: 600; max-width: 90%;"></p>
+        <div id="screen-end" class="screen" style="text-align: center;">
+            <div class="host-avatar" style="margin: 0 auto 20px auto; width: 80px; height: 80px; font-size: 40px;">👨🏽</div>
+            <div class="title-logo" id="end-title" style="font-size: 35px;">FIM DE JOGO!</div>
+            <div style="background: var(--branco-paz); color: var(--azul-profundo); padding: 20px; border-radius: 15px; font-family: 'Montserrat'; font-weight: 800; font-size: 16px; margin-bottom: 20px;" id="end-msg"></div>
             
-            <div style="font-size: 14px; color: #aaa; margin-top: 10px;">PONTUAÇÃO FINAL</div>
-            <div id="pontuacao-final" style="font-size: 60px; font-weight: 800; color: var(--success); margin-bottom: 30px;">0</div>
+            <div style="font-size: 12px; color: var(--dourado-gloria);">Pontuação Total:</div>
+            <div id="pontuacao-final" style="font-size: 50px; color: var(--verde-avivamento); text-shadow: 2px 2px 0 #000; margin-bottom: 20px;">0</div>
             
-            <button class="btn-primary" onclick="shareScore()" style="width: 100%; margin-bottom: 15px;">📲 COMPARTILHAR NO WHATS</button>
-            <button class="btn-help" onclick="location.reload()" style="padding: 15px;">TENTAR NOVAMENTE</button>
+            <button class="btn-share" onclick="compartilharPontuacao()">📲 TESTAR OS IRMÃOS (ZAP)</button>
+            <br><br>
+            <button class="btn-start" style="font-size: 10px; padding: 15px 30px; background: transparent; border-color: var(--dourado-gloria); color: var(--dourado-gloria); box-shadow: none;" onclick="location.reload()">TENTAR DE NOVO</button>
         </div>
 
     </div>
 
     <script>
+        // Progressão Mestra: 15 Perguntas (Fácil -> Médio -> Difícil)
         const perguntas = [
+            // FÁCIL (1 a 5)
             { q: "Quem construiu a arca para escapar do grande dilúvio?", options: ["Abraão", "Moisés", "Noé", "Elias"], answer: 2 },
             { q: "Qual o nome do jovem pastor de ovelhas que derrotou o gigante Golias?", options: ["Salomão", "Davi", "Saul", "Jônatas"], answer: 1 },
             { q: "Quantos eram os apóstolos originais que andavam com Jesus?", options: ["10", "7", "12", "40"], answer: 2 },
             { q: "Qual foi a cidade em que Jesus Cristo nasceu?", options: ["Nazaré", "Jerusalém", "Jericó", "Belém"], answer: 3 },
             { q: "Qual é o primeiro livro da Bíblia Sagrada?", options: ["Êxodo", "Gênesis", "Levítico", "Salmos"], answer: 1 },
+            // MÉDIO (6 a 10)
             { q: "Qual profeta foi arrebatado aos céus em um redemoinho com carruagens de fogo?", options: ["Eliseu", "Isaías", "Enoque", "Elias"], answer: 3 },
             { q: "Quem cortou o cabelo de Sansão, fazendo-o perder sua força sobrenatural?", options: ["Dalila", "Raabe", "Jezabel", "Ester"], answer: 0 },
             { q: "Qual o nome da Ilha onde o apóstolo João escreveu o livro de Apocalipse?", options: ["Chipre", "Creta", "Patmos", "Malta"], answer: 2 },
             { q: "Jesus transformou água em vinho durante um casamento em qual cidade?", options: ["Cafarnaum", "Caná da Galileia", "Betânia", "Tiberíades"], answer: 1 },
             { q: "Qual animal Deus fez falar para repreender o profeta Balaão?", options: ["Um leão", "Uma serpente", "Um corvo", "Uma jumenta"], answer: 3 },
+            // DIFÍCIL (11 a 15)
             { q: "Quem o Apóstolo Paulo chama de 'meu verdadeiro filho na fé' nas cartas pastorais?", options: ["Timóteo", "Silas", "Tito", "Filemom"], answer: 0 },
             { q: "No Antigo Testamento, quem era o avô do rei Davi?", options: ["Jessé", "Obede", "Boaz", "Salmon"], answer: 1 },
             { q: "Qual era o nome do servo do sumo sacerdote que teve a orelha cortada por Pedro?", options: ["Malco", "Caifás", "Anás", "Barrabás"], answer: 0 },
-            { q: "O que significa a palavra 'Ebenézer'?", options: ["Deus conosco", "Até aqui nos ajudou o Senhor", "O Senhor é a minha bandeira", "Casa de Pão"], answer: 1 },
+            { q: "O que significa a palavra 'Ebenézer', dita pelo profeta Samuel?", options: ["Deus conosco", "Até aqui nos ajudou o Senhor", "O Senhor é a minha bandeira", "Casa de Pão"], answer: 1 },
             { q: "Qual destes livros da Bíblia NÃO contém a palavra 'Deus' em nenhum versículo?", options: ["Rute", "Cânticos", "Ester", "Eclesiastes"], answer: 2 }
         ];
 
-        let state = {
-            currentQuestion: 0,
-            score: 0,
-            timeLeft: 30,
-            isLocked: false, // O famoso Anti-Bug
-            skips: 3,
-            usedAlunos: false,
-            usedMarcus: false,
-            timerId: null
-        };
+        let perguntaAtual = 0;
+        let pulosRestantes = 3;
+        let alunosUsado = false;
+        let marcusUsado = false;
+        let placar = 0;
+        let tempoRestante = 30;
+        let intervaloTimer;
+        let emProcessamento = false; // Evita cliques duplos
 
         const falasPastor = [
             "Pega esse código, igreja!",
             "Receba essa sabedoria! Aleluia!",
             "Fundamento puro! Você crê?!",
-            "É Ano de Avivamento! Certa resposta!"
+            "É Ano de Avivamento, varão! Certa resposta!",
+            "Olha pra mim... O inimigo tentou, mas a passagem é sua!"
         ];
 
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+        function trocarTela(idTela) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(idTela).classList.add('active');
         }
 
-        function startGame() {
-            showScreen('screen-game');
-            loadQuestion();
+        function iniciarJogo() {
+            trocarTela('screen-game');
+            carregarPergunta();
         }
 
-        function startTimer() {
-            clearInterval(state.timerId);
-            state.timeLeft = 30;
-            updateTimerUI();
+        function iniciarTimer() {
+            tempoRestante = 30;
+            atualizarBarraTempo();
+            clearInterval(intervaloTimer);
+            document.getElementById('game-wrapper').classList.remove('tela-tensao');
             
-            document.getElementById('game-wrapper').classList.remove('tension-mode');
+            intervaloTimer = setInterval(() => {
+                tempoRestante--;
+                atualizarBarraTempo();
 
-            state.timerId = setInterval(() => {
-                if(state.isLocked) return; // Pausa o relógio durante as animações
-
-                state.timeLeft--;
-                updateTimerUI();
-
-                if (state.timeLeft === 10) {
-                    document.getElementById('game-wrapper').classList.add('tension-mode');
-                    document.getElementById('host-message').innerText = "Irmão, o tempo tá acabando! Fogo no altar, responde logo!";
+                // GATILHO DE TENSÃO - FLOW STATE
+                if (tempoRestante === 10) {
+                    document.getElementById('game-wrapper').classList.add('tela-tensao');
+                    document.getElementById('host-message').innerText = "Pastor André: 'Irmão, o tempo tá acabando! Fogo no altar, responde logo!'";
                 }
 
-                if (state.timeLeft <= 0) {
-                    clearInterval(state.timerId);
-                    endGame(false, "TEMPO ESGOTADO!");
+                if (tempoRestante <= 0) {
+                    clearInterval(intervaloTimer);
+                    finalizarJogo(false, "O TEMPO ACABOU!");
                 }
             }, 1000);
         }
 
-        function updateTimerUI() {
-            const display = document.getElementById('timer-display');
-            display.innerText = `${state.timeLeft}s`;
-            if(state.timeLeft <= 10) {
-                display.style.color = 'var(--danger)';
-                display.style.borderColor = 'var(--danger)';
+        function atualizarBarraTempo() {
+            const barra = document.getElementById('timer-bar');
+            const texto = document.getElementById('timer-text');
+            const porcentagem = (tempoRestante / 30) * 100;
+            
+            barra.style.width = `${porcentagem}%`;
+            texto.innerText = `${tempoRestante}s`;
+
+            if (tempoRestante <= 10) {
+                barra.style.backgroundColor = 'var(--vermelho-alerta)';
+            } else if (tempoRestante <= 20) {
+                barra.style.backgroundColor = 'var(--laranja-fogo)';
             } else {
-                display.style.color = 'var(--accent)';
-                display.style.borderColor = 'var(--glass-border)';
+                barra.style.backgroundColor = 'var(--verde-avivamento)';
             }
         }
 
-        function loadQuestion() {
-            state.isLocked = false;
+        function carregarPergunta() {
+            emProcessamento = false;
             
-            if (state.currentQuestion >= perguntas.length) {
-                endGame(true, "ZEROU O JOGO!");
+            if (perguntaAtual >= perguntas.length) {
+                finalizarJogo(true, "ZEROU O JOGO!");
                 return;
             }
 
-            // Atualiza Progresso
-            const progress = ((state.currentQuestion) / perguntas.length) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-
-            const q = perguntas[state.currentQuestion];
-            document.getElementById('question').innerText = q.q;
+            // Atualiza Label de Nível
+            let nivelTexto = "BEBÊ NA FÉ 🍼";
+            if(perguntaAtual >= 5 && perguntaAtual < 10) nivelTexto = "JOVEM FORTE 🗡️";
+            if(perguntaAtual >= 10) nivelTexto = "CÍRCULO DE ORAÇÃO 🔥";
             
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = '';
+            document.getElementById('question-label').innerText = `NÍVEL: ${nivelTexto} (Progresso: ${perguntaAtual + 1}/${perguntas.length})`;
 
-            q.options.forEach((opt, index) => {
+            const p = perguntas[perguntaAtual];
+            document.getElementById('question').innerText = p.q;
+            const optionsEl = document.getElementById('options');
+            optionsEl.innerHTML = '';
+
+            p.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'btn-option';
+                btn.className = 'btn-resp';
                 btn.innerText = `${index + 1}. ${opt}`;
-                btn.onclick = () => checkAnswer(index, btn);
+                btn.onclick = () => checarResposta(index, btn);
                 btn.id = `opt-${index}`;
-                optionsContainer.appendChild(btn);
+                optionsEl.appendChild(btn);
             });
 
-            if(state.currentQuestion > 0) {
-                document.getElementById('host-message').innerText = "Valendo! Lê com calma mas não perde o tempo!";
+            if (perguntaAtual === 0) {
+                document.getElementById('host-message').innerText = "Pastor André: 'Vamos aquecer! Pergunta fácil pra não ter desculpa de que perdeu a passagem logo de cara!'";
+            } else if (!document.getElementById('game-wrapper').classList.contains('tela-tensao')) {
+                document.getElementById('host-message').innerText = "Pastor André: 'Valendo! Cuidado com a pegadinha do inimigo, lê com calma mas não perde o tempo!'";
             }
             
-            startTimer();
+            iniciarTimer();
         }
 
-        function checkAnswer(selectedIndex, btnElement) {
-            if (state.isLocked) return;
-            state.isLocked = true; // Bloqueia novos cliques (Anti-bug)
-            
-            // Desabilita botões
-            document.querySelectorAll('.btn-option, .btn-help').forEach(b => b.disabled = true);
+        function checarResposta(selectedIndex, btnElement) {
+            if (emProcessamento) return;
+            emProcessamento = true;
+            clearInterval(intervaloTimer); // Para o relógio
+            document.getElementById('game-wrapper').classList.remove('tela-tensao');
 
-            // Efeito Suspense
+            // Trava os botões
+            const botoes = document.querySelectorAll('.btn-resp');
+            botoes.forEach(b => b.disabled = true);
+
+            // DOPAMINA: Efeito de Suspense Cassino (Atraso de Recompensa)
             btnElement.classList.add('suspense');
-            document.getElementById('host-message').innerText = "Você tem certeza absoluta disso, varão?!";
+            document.getElementById('host-message').innerText = "Pastor André: 'Eita glória... Você tem certeza absoluta disso, varão?! Cuidado...'";
 
             setTimeout(() => {
                 btnElement.classList.remove('suspense');
-                const correctIndex = perguntas[state.currentQuestion].answer;
+                const correta = perguntas[perguntaAtual].answer;
 
-                if (selectedIndex === correctIndex) {
+                if (selectedIndex === correta) {
                     btnElement.classList.add('correct');
                     
-                    // Cálculo de pontos dinâmico
-                    let base = state.currentQuestion >= 10 ? 10000 : (state.currentQuestion >= 5 ? 3000 : 1000);
-                    let points = base + (state.timeLeft * 100);
-                    
-                    animateScore(state.score, state.score + points);
-                    state.score += points;
+                    // ESCALONAMENTO DE PONTOS (Progressão)
+                    let basePoints = 1000;
+                    if(perguntaAtual >= 5) basePoints = 3000;
+                    if(perguntaAtual >= 10) basePoints = 10000;
 
-                    const fala = falasPastor[Math.floor(Math.random() * falasPastor.length)];
-                    document.getElementById('host-message').innerText = `${fala} +${points} pontos!`;
+                    const pontosGanhos = basePoints + (tempoRestante * 100);
+                    placar += pontosGanhos;
                     
-                    state.currentQuestion++;
-                    setTimeout(() => {
-                        enableHelps();
-                        loadQuestion();
-                    }, 2500);
+                    animarPlacar(placar - pontosGanhos, placar);
 
+                    const falaAleatoria = falasPastor[Math.floor(Math.random() * falasPastor.length)];
+                    document.getElementById('host-message').innerText = `Pastor André: '${falaAleatoria} Ganhou mais ${pontosGanhos} pontos de glória!'`;
+                    
+                    perguntaAtual++;
+                    setTimeout(carregarPergunta, 3000);
                 } else {
                     btnElement.classList.add('wrong');
-                    document.getElementById(`opt-${correctIndex}`).classList.add('correct');
-                    document.getElementById('host-message').innerText = "Misericórdia! Quebrou o avivamento! Perdeu a passagem!";
-                    
-                    setTimeout(() => endGame(false, "RESPOSTA ERRADA!"), 2500);
+                    document.getElementById(`opt-${correta}`).classList.add('correct');
+                    document.getElementById('host-message').innerText = "Pastor André: 'Misericórdia! Quebrou o avivamento! Perdeu a passagem!'";
+                    setTimeout(() => finalizarJogo(false, "RESPOSTA ERRADA!"), 2500);
                 }
-            }, 2500); // 2.5s de suspense garantido
+            }, 2500); // 2.5 segundos de pura tensão e liberação de dopamina
         }
 
-        function animateScore(start, end) {
-            let current = start;
-            const step = Math.ceil((end - start) / 20);
+        // Função para rodar o número do placar estilo "Caça-níquel"
+        function animarPlacar(inicio, fim) {
+            let atual = inicio;
+            const step = Math.ceil((fim - inicio) / 20);
             const timer = setInterval(() => {
-                current += step;
-                if (current >= end) {
-                    current = end;
+                atual += step;
+                if (atual >= fim) {
+                    atual = fim;
                     clearInterval(timer);
                 }
-                document.getElementById('placar').innerText = current.toLocaleString('pt-BR');
+                document.getElementById('placar').innerText = atual.toLocaleString('pt-BR');
             }, 50);
         }
 
-        function enableHelps() {
-            if(!state.usedAlunos) document.getElementById('btn-alunos').disabled = false;
-            if(state.skips > 0) document.getElementById('btn-pulo').disabled = false;
-            if(!state.usedMarcus) document.getElementById('btn-marcus').disabled = false;
-        }
-
-        // --- FUNÇÕES DE AJUDA ---
-        function useAlunos() {
-            if (state.usedAlunos || state.isLocked) return;
-            state.usedAlunos = true;
+        function usarAlunos() {
+            if (alunosUsado || emProcessamento) return;
+            alunosUsado = true;
             document.getElementById('btn-alunos').disabled = true;
-            const correctOpt = perguntas[state.currentQuestion].answer + 1;
-            document.getElementById('host-message').innerText = `A galera da Solus Scriptura puxou o grego original e mandou ir na OPÇÃO ${correctOpt}!`;
+            const correta = perguntas[perguntaAtual].answer + 1;
+            document.getElementById('host-message').innerText = `Pastor André: 'Pausa tudo! Os teólogos da Solus Scriptura puxaram o grego original e disseram pra ir na OPÇÃO ${correta}!'`;
         }
 
-        function usePulo() {
-            if (state.skips <= 0 || state.isLocked) return;
-            state.skips--;
-            document.getElementById('qtd-pulos').innerText = state.skips;
-            document.getElementById('host-message').innerText = "PULOU! Usou a sabedoria! Vamos pra próxima!";
-            
-            if (state.skips === 0) document.getElementById('btn-pulo').disabled = true;
-            
-            state.isLocked = true; // Previne clique duplo no pulo
-            state.currentQuestion++;
-            setTimeout(loadQuestion, 1500);
-        }
-
-        function useMarcus() {
-            if (state.usedMarcus || state.isLocked) return;
-            state.usedMarcus = true;
-            document.getElementById('btn-marcus').disabled = true;
-
-            const correct = perguntas[state.currentQuestion].answer;
-            let wrongs = [0, 1, 2, 3].filter(i => i !== correct);
-            wrongs = wrongs.sort(() => 0.5 - Math.random()).slice(0, 2);
-
-            wrongs.forEach(index => {
-                const btn = document.getElementById(`opt-${index}`);
-                if(btn) {
-                    btn.disabled = true;
-                    btn.classList.add('hidden-by-marcus');
-                }
-            });
-
-            document.getElementById('host-message').innerText = "Marcus da Mídia meteu a tesoura na edição e sumiu com 2 erradas! Ficou fácil!";
-        }
-
-        function endGame(won, reason) {
-            clearInterval(state.timerId);
-            document.getElementById('game-wrapper').classList.remove('tension-mode');
-            showScreen('screen-end');
-            
-            const titleEl = document.getElementById('end-title');
-            titleEl.innerText = reason;
-            
-            document.getElementById('pontuacao-final').innerText = state.score.toLocaleString('pt-BR');
-
-            if (won) {
-                titleEl.style.color = "var(--success)";
-                document.getElementById('end-msg').innerText = "ALELUIA! Você provou o fundamento. A passagem pra Curionópolis está garantida na sua mão!";
-            } else {
-                titleEl.style.color = "var(--danger)";
-                document.getElementById('end-msg').innerText = `O inimigo roubou sua benção. Você completou ${Math.floor((state.currentQuestion / perguntas.length) * 100)}% das perguntas.`;
+        function usarPulo() {
+            if (pulosRestantes > 0 && !emProcessamento) {
+                pulosRestantes--;
+                document.getElementById('qtd-pulos').innerText = pulosRestantes;
+                document.getElementById('host-message').innerText = "Pastor André: 'PULOU! Usou a sabedoria! Vamos pra próxima antes que esfrie!'";
+                if (pulosRestantes === 0) document.getElementById('btn-pulo').disabled = true;
+                perguntaAtual++;
+                clearInterval(intervaloTimer);
+                setTimeout(carregarPergunta, 1500);
             }
         }
 
-        function shareScore() {
-            const texto = `🔥 Joguei o SHOW DO MILHÃO CRENTE!\n\n👨🏽 Pastor André mandou a palavra e eu fiz:\n🏆 ${state.score.toLocaleString('pt-BR')} Pontos!\n\nDuvido você ser mais rápido e ganhar a passagem pra Curionópolis!\n\n✈️ Jogue aqui: https://showdomilhaocrente.netlify.app/`;
+        function usarMarcus() {
+            if (marcusUsado || emProcessamento) return;
+            marcusUsado = true;
+            document.getElementById('btn-marcus').disabled = true;
+
+            const correta = perguntas[perguntaAtual].answer;
+            let erradas = [0, 1, 2, 3].filter(i => i !== correta);
+            erradas = erradas.sort(() => 0.5 - Math.random()).slice(0, 2);
+
+            erradas.forEach(index => {
+                const btn = document.getElementById(`opt-${index}`);
+                if(btn) {
+                    btn.disabled = true;
+                    btn.innerText = '❌ CORTADO NA EDIÇÃO ❌';
+                    btn.style.opacity = '0.3';
+                }
+            });
+
+            document.getElementById('host-message').innerText = "Pastor André: 'Chama o Marcus da Mídia! Ele cortou 2 respostas erradas na mesa de edição! Agora ficou fácil!'";
+        }
+
+        function finalizarJogo(venceu, motivo) {
+            document.getElementById('game-wrapper').classList.remove('tela-tensao');
+            trocarTela('screen-end');
+            
+            document.getElementById('end-title').innerText = motivo;
+            
+            // Efeito visual de contagem no final
+            let displayScore = 0;
+            const finalScoreEl = document.getElementById('pontuacao-final');
+            const scoreInterval = setInterval(() => {
+                displayScore += Math.ceil(placar / 30) || 1;
+                if(displayScore >= placar) {
+                    displayScore = placar;
+                    clearInterval(scoreInterval);
+                }
+                finalScoreEl.innerText = displayScore.toLocaleString('pt-BR');
+            }, 50);
+
+            if (venceu) {
+                document.getElementById('end-title').style.color = "var(--verde-avivamento)";
+                document.getElementById('end-msg').innerHTML = "Pastor André: 'ALELUIA! ZEROU O JOGO! O nível Círculo de Oração tá no sangue! Sua mala tá pronta, <b>a passagem pra Curionópolis é 100% SUA!</b> Desce pro aeroporto agora!'";
+            } else {
+                document.getElementById('end-title').style.color = "var(--vermelho-alerta)";
+                let progresso = (perguntaAtual / perguntas.length) * 100;
+                document.getElementById('end-msg').innerHTML = `Pastor André: 'Faltou fundamento no finalzinho... Você completou ${progresso.toFixed(0)}% da jornada. Perdeu a passagem pra Curionópolis e vai ter que voltar pra Escola Dominical!'`;
+            }
+        }
+
+        function compartilharPontuacao() {
+            let nivel = "BEBÊ NA FÉ 🍼";
+            if(perguntaAtual >= 5) nivel = "JOVEM FORTE 🗡️";
+            if(perguntaAtual >= 10 || placar > 50000) nivel = "CÍRCULO DE ORAÇÃO 🔥";
+
+            const texto = `🔥 Joguei o SHOW DO MILHÃO CRENTE: O Avivamento!\n\n👨🏽 Pastor André mandou a palavra e eu fiz:\n🏆 ${placar.toLocaleString('pt-BR')} Pontos!\n📈 Meu Nível Teológico: ${nivel}\n\nDuvido você ser mais rápido e ganhar a passagem pra Curionópolis!\n\n✈️ Jogue aqui: https://showdomilhaocrente.netlify.app/`;
             
             if (navigator.share) {
                 navigator.share({ title: 'Show do Milhão Crente', text: texto }).catch(console.error);
             } else {
                 navigator.clipboard.writeText(texto).then(() => {
-                    alert("✅ O Texto foi copiado! Agora é só colar no WhatsApp da igreja!");
+                    alert("✅ O Texto foi copiado! Cole no grupo da Igreja no WhatsApp e veja quem bate seu recorde!");
                 }).catch(err => {
                     alert("Erro ao copiar. :(");
                 });
