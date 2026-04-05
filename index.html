@@ -3,37 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show do Milhão Bíblico</title>
+    <title>Show do Milhão Crente</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --azul-fundo: #000033;
+            --azul-painel: #000080;
+            --amarelo: #FFD700;
+            --vermelho: #FF0000;
+            --verde: #00FF00;
+            --branco: #FFFFFF;
+        }
+
         body {
             font-family: 'Press Start 2P', cursive;
-            background-color: #000080; /* Azul clássico do programa */
-            color: #FFFF00; /* Amarelo clássico */
+            background-color: var(--azul-fundo);
+            color: var(--amarelo);
             text-align: center;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
         }
-        #game-container {
+
+        #game-wrapper {
             max-width: 800px;
             margin: 0 auto;
-            border: 4px solid #FFFF00;
-            padding: 20px;
-            background-color: #000040;
-            box-shadow: 10px 10px 0px #000000;
+            border: 6px solid var(--amarelo);
+            background-color: var(--azul-painel);
+            box-shadow: 0 0 20px var(--amarelo), inset 0 0 20px #000;
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        h1 {
-            font-size: 24px;
-            color: #FFD700;
-            text-shadow: 2px 2px 0 #000;
+
+        .screen {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s ease-in;
         }
-        .premio {
-            font-size: 12px;
-            color: #00FF00;
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- TELA INICIAL --- */
+        .title-logo {
+            font-size: 32px;
+            color: var(--amarelo);
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); text-shadow: 4px 4px 0 #000; }
+            50% { transform: scale(1.05); text-shadow: 4px 4px 20px var(--amarelo); }
+            100% { transform: scale(1); text-shadow: 4px 4px 0 #000; }
+        }
+
+        .btn-start, .btn-share {
+            background-color: var(--verde);
+            color: #000;
+            border: 4px solid var(--branco);
+            padding: 20px 40px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.2s;
+            box-shadow: 5px 5px 0 #000;
+        }
+
+        .btn-start:hover, .btn-share:hover {
+            background-color: var(--amarelo);
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0 #000;
+        }
+
+        /* --- HUD (Placar e Tempo) --- */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000;
+            padding: 10px 20px;
+            border-bottom: 4px solid var(--amarelo);
+            margin-top: -30px;
             margin-bottom: 20px;
         }
+
+        .score-display {
+            font-size: 14px;
+            color: var(--verde);
+        }
+
+        .timer-container {
+            width: 200px;
+            height: 20px;
+            border: 2px solid var(--branco);
+            background-color: #333;
+            position: relative;
+        }
+
+        #timer-bar {
+            height: 100%;
+            background-color: var(--verde);
+            width: 100%;
+            transition: width 1s linear, background-color 0.5s;
+        }
+
+        #timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: var(--branco);
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        /* --- MENSAGEM DO PASTOR --- */
         .host-box {
-            background-color: #FFF;
+            background-color: var(--branco);
             color: #000;
             padding: 15px;
             border-radius: 10px;
@@ -50,221 +149,350 @@
             left: 50%;
             border-width: 15px 15px 0;
             border-style: solid;
-            border-color: #FFF transparent transparent transparent;
+            border-color: var(--branco) transparent transparent transparent;
             transform: translateX(-50%);
         }
+
+        /* --- ÁREA DO QUIZ --- */
         #question {
             font-size: 16px;
             margin: 30px 0;
-            color: #FFF;
+            color: var(--branco);
+            text-shadow: 2px 2px 0 #000;
         }
+
         .btn-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 30px;
         }
+
         .btn-resp {
-            background-color: #000080;
-            color: #FFF;
-            border: 2px solid #FFF;
+            background-color: var(--azul-fundo);
+            color: var(--branco);
+            border: 2px solid var(--branco);
             padding: 15px;
             font-family: 'Press Start 2P', cursive;
             font-size: 12px;
             cursor: pointer;
             text-align: left;
             transition: 0.2s;
+            position: relative;
         }
-        .btn-resp:hover {
-            background-color: #FFFF00;
+
+        .btn-resp:hover:not(:disabled) {
+            background-color: var(--amarelo);
             color: #000;
+            transform: scale(1.02);
         }
+
         .btn-resp:disabled {
-            background-color: #333;
-            color: #666;
-            border-color: #666;
+            opacity: 0.7;
             cursor: not-allowed;
         }
+
+        .btn-resp.correct {
+            background-color: var(--verde) !important;
+            color: #000 !important;
+            animation: blink 0.3s 3;
+        }
+
+        .btn-resp.wrong {
+            background-color: var(--vermelho) !important;
+            color: var(--branco) !important;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* --- AJUDAS --- */
         .helps {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
-            border-top: 2px dashed #FFFF00;
+            border-top: 2px dashed var(--amarelo);
             padding-top: 20px;
         }
+
         .btn-help {
-            background-color: #FF0000;
-            color: #FFF;
-            border: 4px solid #8B0000;
+            background-color: #8B0000;
+            color: var(--branco);
+            border: 2px solid var(--amarelo);
             padding: 10px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
+            font-size: 9px;
             cursor: pointer;
+            width: 30%;
+            transition: 0.2s;
         }
-        .btn-help:hover {
-            background-color: #FF6347;
+
+        .btn-help:hover:not(:disabled) {
+            background-color: var(--vermelho);
+            transform: translateY(-2px);
         }
+
         .btn-help:disabled {
-            background-color: #555;
-            border-color: #222;
+            background-color: #333;
+            color: #666;
+            border-color: #555;
             cursor: not-allowed;
+        }
+
+        /* --- TELA FINAL --- */
+        .final-score {
+            font-size: 40px;
+            color: var(--verde);
+            margin: 30px 0;
+            text-shadow: 3px 3px 0 #000;
         }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <h1>SHOW DO MILHÃO BÍBLICO</h1>
-        <div class="premio">VALENDO: UMA PASSAGEM SÓ DE IDA PARA CURIONÓPOLIS!</div>
+    <div id="game-wrapper">
         
-        <div class="host-box" id="host-message">
-            Pastor André Fernandes: "A paz do Senhor, jogador! Você está preparado? Vamos testar seus conhecimentos na Palavra!"
+        <div id="screen-start" class="screen active">
+            <div class="title-logo">SHOW DO MILHÃO<br>CRENTE</div>
+            <p style="color: var(--verde); font-size: 12px; margin-bottom: 40px;">Valendo uma passagem só de ida para Curionópolis!</p>
+            <p style="font-size: 10px; line-height: 1.8;">Responda rápido para ganhar MAIS PONTOS!<br>Você tem 30 segundos por pergunta.</p>
+            <button class="btn-start" onclick="iniciarJogo()">COMEÇAR JOGO</button>
         </div>
 
-        <div id="quiz-area">
-            <div id="question">Carregando pergunta...</div>
-            <div class="btn-container" id="options">
+        <div id="screen-game" class="screen">
+            <div class="hud">
+                <div class="score-display">PONTOS: <span id="placar">0</span></div>
+                <div class="timer-container">
+                    <div id="timer-bar"></div>
+                    <div id="timer-text">30s</div>
                 </div>
+            </div>
+
+            <div class="host-box" id="host-message">
+                Pastor André Fernandes: "A paz do Senhor! Vamos lá!"
+            </div>
+
+            <div id="question">Carregando pergunta...</div>
+            <div class="btn-container" id="options"></div>
+
+            <div class="helps">
+                <button class="btn-help" id="btn-alunos" onclick="usarAlunos()">ALUNOS SOLUS SCRIPTURA</button>
+                <button class="btn-help" id="btn-pulo" onclick="usarPulo()">PULAR (<span id="qtd-pulos">3</span>x)</button>
+                <button class="btn-help" id="btn-marcus" onclick="usarMarcus()">MARCUS DA MÍDIA</button>
+            </div>
         </div>
 
-        <div class="helps">
-            <button class="btn-help" id="btn-alunos" onclick="usarAlunos()">ALUNOS SOLUS SCRIPTURA</button>
-            <button class="btn-help" id="btn-pulo" onclick="usarPulo()">PULAR (<span id="qtd-pulos">3</span>x)</button>
-            <button class="btn-help" id="btn-marcus" onclick="usarMarcus()">MARCUS DA MÍDIA (Cartas)</button>
+        <div id="screen-end" class="screen">
+            <div class="title-logo" id="end-title">FIM DE JOGO!</div>
+            <p id="end-msg" style="font-size: 14px; line-height: 1.5;">O culto acabou pra você!</p>
+            <div class="final-score"><span id="pontuacao-final">0</span> PTS</div>
+            <p style="font-size: 10px; margin-bottom: 30px;" id="premio-final"></p>
+            
+            <button class="btn-share" onclick="compartilharPontuacao()">COMPARTILHAR SCORE</button>
+            <br><br>
+            <button class="btn-start" style="font-size: 12px; padding: 15px;" onclick="location.reload()">JOGAR NOVAMENTE</button>
         </div>
+
     </div>
 
     <script>
         const perguntas = [
-            {
-                q: "Quem foi engolido por um grande peixe após tentar fugir do chamado de Deus?",
-                options: ["Pedro", "Jonas", "Paulo", "João"],
-                answer: 1
-            },
-            {
-                q: "Quantos dias e noites choveu ininterruptamente durante o Dilúvio?",
-                options: ["7", "12", "40", "100"],
-                answer: 2
-            },
-            {
-                q: "Quem o Apóstolo Paulo chama de 'meu verdadeiro filho na fé' nas cartas pastorais?",
-                options: ["Timóteo", "Barnabé", "Silas", "Lucas"],
-                answer: 0
-            },
-            {
-                q: "Qual era a profissão de Mateus antes de ser chamado por Jesus?",
-                options: ["Pescador", "Carpinteiro", "Cobrador de Impostos", "Fedor de tendas"],
-                answer: 2
-            },
-            {
-                q: "Quem cortou o cabelo de Sansão, fazendo-o perder sua força?",
-                options: ["Raabe", "Dalila", "Ester", "Rute"],
-                answer: 1
-            }
+            { q: "Quem foi engolido por um grande peixe após tentar fugir do chamado de Deus?", options: ["Pedro", "Jonas", "Paulo", "João"], answer: 1 },
+            { q: "Quantos dias e noites choveu ininterruptamente durante o Dilúvio?", options: ["7", "12", "40", "100"], answer: 2 },
+            { q: "Quem o Apóstolo Paulo chama de 'meu verdadeiro filho na fé' nas cartas pastorais?", options: ["Timóteo", "Barnabé", "Silas", "Lucas"], answer: 0 },
+            { q: "Qual era a profissão de Mateus antes de ser chamado por Jesus?", options: ["Pescador", "Carpinteiro", "Cobrador de Impostos", "Fedor de tendas"], answer: 2 },
+            { q: "Quem cortou o cabelo de Sansão, fazendo-o perder sua força?", options: ["Raabe", "Dalila", "Ester", "Rute"], answer: 1 }
         ];
 
         let perguntaAtual = 0;
         let pulosRestantes = 3;
         let alunosUsado = false;
         let marcusUsado = false;
+        
+        let placar = 0;
+        let tempoRestante = 30;
+        let intervaloTimer;
+        let aguardandoProxima = false;
 
-        const questionEl = document.getElementById('question');
-        const optionsEl = document.getElementById('options');
-        const hostMsgEl = document.getElementById('host-message');
+        const basePoints = 1000;
+        const timeBonusMultiplier = 50;
+
+        function trocarTela(idTela) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(idTela).classList.add('active');
+        }
+
+        function iniciarJogo() {
+            trocarTela('screen-game');
+            carregarPergunta();
+        }
+
+        function iniciarTimer() {
+            tempoRestante = 30;
+            atualizarBarraTempo();
+            clearInterval(intervaloTimer);
+            
+            intervaloTimer = setInterval(() => {
+                tempoRestante--;
+                atualizarBarraTempo();
+
+                if (tempoRestante <= 0) {
+                    clearInterval(intervaloTimer);
+                    finalizarJogo(false, "TEMPO ESGOTADO!");
+                }
+            }, 1000);
+        }
+
+        function atualizarBarraTempo() {
+            const barra = document.getElementById('timer-bar');
+            const texto = document.getElementById('timer-text');
+            const porcentagem = (tempoRestante / 30) * 100;
+            
+            barra.style.width = `${porcentagem}%`;
+            texto.innerText = `${tempoRestante}s`;
+
+            if (tempoRestante <= 10) {
+                barra.style.backgroundColor = 'var(--vermelho)';
+            } else if (tempoRestante <= 20) {
+                barra.style.backgroundColor = 'var(--amarelo)';
+            } else {
+                barra.style.backgroundColor = 'var(--verde)';
+            }
+        }
 
         function carregarPergunta() {
+            aguardandoProxima = false;
             if (perguntaAtual >= perguntas.length) {
-                venceuJogo();
+                finalizarJogo(true, "ZEROU O JOGO!");
                 return;
             }
 
             const p = perguntas[perguntaAtual];
-            questionEl.innerText = p.q;
+            document.getElementById('question').innerText = p.q;
+            const optionsEl = document.getElementById('options');
             optionsEl.innerHTML = '';
 
             p.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-resp';
                 btn.innerText = `${index + 1}) ${opt}`;
-                btn.onclick = () => checarResposta(index);
+                btn.onclick = () => checarResposta(index, btn);
                 btn.id = `opt-${index}`;
                 optionsEl.appendChild(btn);
             });
 
-            hostMsgEl.innerText = 'Pastor André Fernandes: "Valendo a passagem para Curionópolis! Qual a resposta correta?"';
+            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Valendo! O relógio está correndo!"';
+            iniciarTimer();
         }
 
-        function checarResposta(selectedIndex) {
+        function checarResposta(selectedIndex, btnElement) {
+            if (aguardandoProxima) return;
+            aguardandoProxima = true;
+            clearInterval(intervaloTimer); // Para o relógio
+
+            const botoes = document.querySelectorAll('.btn-resp');
+            botoes.forEach(b => b.disabled = true);
+
             const correta = perguntas[perguntaAtual].answer;
+
             if (selectedIndex === correta) {
-                hostMsgEl.innerText = 'Pastor André Fernandes: "Ceeeerta Resposta! Glória a Deus! Vamos para a próxima!"';
+                btnElement.classList.add('correct');
+                
+                // Calcula pontuação: Pontos Base + (Segundos Restantes * Multiplicador)
+                const pontosGanhos = basePoints + (tempoRestante * timeBonusMultiplier);
+                placar += pontosGanhos;
+                document.getElementById('placar').innerText = placar;
+
+                document.getElementById('host-message').innerText = `Pastor André Fernandes: "Ceeeerta Resposta! Ganhou ${pontosGanhos} pontos pela rapidez!"`;
+                
                 perguntaAtual++;
-                setTimeout(carregarPergunta, 2000);
+                setTimeout(carregarPergunta, 2500);
             } else {
-                hostMsgEl.innerText = 'Pastor André Fernandes: "Que pena! Você errou. Vai ter que voltar para a Escola Bíblica Dominical. Fim de jogo!"';
-                desativarTudo();
+                btnElement.classList.add('wrong');
+                document.getElementById(`opt-${correta}`).classList.add('correct'); // Mostra a certa
+                setTimeout(() => finalizarJogo(false, "RESPOSTA ERRADA!"), 2000);
             }
         }
 
         function usarAlunos() {
-            if (alunosUsado) return;
+            if (alunosUsado || aguardandoProxima) return;
             alunosUsado = true;
             document.getElementById('btn-alunos').disabled = true;
             
             const correta = perguntas[perguntaAtual].answer;
             const letra = correta + 1;
-            hostMsgEl.innerText = `Pastor André Fernandes: "Os alunos da Universidade Solus Scriptura abriram as Bíblias de estudo e disseram que a resposta tem 99% de chance de ser a número ${letra}!"`;
+            document.getElementById('host-message').innerText = `Pastor André Fernandes: "A galera do Solus Scriptura abriu as bíblias e falaram que é a opção ${letra}!"`;
         }
 
         function usarPulo() {
-            if (pulosRestantes > 0) {
+            if (pulosRestantes > 0 && !aguardandoProxima) {
                 pulosRestantes--;
                 document.getElementById('qtd-pulos').innerText = pulosRestantes;
-                hostMsgEl.innerText = 'Pastor André Fernandes: "Você pulou! Vamos para uma nova pergunta."';
-                perguntaAtual++;
+                document.getElementById('host-message').innerText = 'Pastor André Fernandes: "PULOU! Vamos para a próxima e o relógio vai zerar!"';
+                
                 if (pulosRestantes === 0) document.getElementById('btn-pulo').disabled = true;
-                carregarPergunta();
+                
+                perguntaAtual++;
+                clearInterval(intervaloTimer);
+                setTimeout(carregarPergunta, 1500);
             }
         }
 
         function usarMarcus() {
-            if (marcusUsado) return;
+            if (marcusUsado || aguardandoProxima) return;
             marcusUsado = true;
             document.getElementById('btn-marcus').disabled = true;
 
             const correta = perguntas[perguntaAtual].answer;
             let erradas = [0, 1, 2, 3].filter(i => i !== correta);
-            
-            // Embaralha as erradas e pega 2 para eliminar
-            erradas = erradas.sort(() => 0.5 - Math.random()).slice(0, 2);
+            erradas = erradas.sort(() => 0.5 - Math.random()).slice(0, 2); // Pega 2 erradas
 
             erradas.forEach(index => {
                 const btn = document.getElementById(`opt-${index}`);
                 if(btn) {
                     btn.disabled = true;
                     btn.innerText = '--- ELIMINADA PELO MARCUS ---';
+                    btn.style.opacity = '0.3';
                 }
             });
 
-            hostMsgEl.innerText = 'Pastor André Fernandes: "Atenção! Marcus da Mídia entrou na mesa de corte e tirou 2 alternativas erradas da sua tela!"';
+            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Marcus da Mídia entrou em ação e cortou 2 alternativas erradas da tela!"';
         }
 
-        function desativarTudo() {
-            optionsEl.childNodes.forEach(btn => btn.disabled = true);
-            document.getElementById('btn-alunos').disabled = true;
-            document.getElementById('btn-pulo').disabled = true;
-            document.getElementById('btn-marcus').disabled = true;
+        function finalizarJogo(venceu, motivo) {
+            clearInterval(intervaloTimer);
+            trocarTela('screen-end');
+            
+            document.getElementById('end-title').innerText = motivo;
+            document.getElementById('pontuacao-final').innerText = placar;
+
+            if (venceu) {
+                document.getElementById('end-msg').innerText = 'ALELUIA! Você provou que conhece a Palavra!';
+                document.getElementById('premio-final').innerText = 'Prêmio garantido: 1 Passagem só de ida para Curionópolis!';
+            } else {
+                document.getElementById('end-msg').innerText = 'Foi por pouco! Volte para a Escola Bíblica Dominical!';
+                document.getElementById('premio-final').innerText = 'Você perdeu a passagem para Curionópolis...';
+            }
         }
 
-        function venceuJogo() {
-            questionEl.innerText = "PARABÉNS!!!";
-            optionsEl.innerHTML = '';
-            hostMsgEl.innerText = 'Pastor André Fernandes: "Você zerou o jogo! Arrume as malas, sua passagem SÓ DE IDA para Curionópolis já está garantida! Deus abençoe!"';
-            desativarTudo();
+        function compartilharPontuacao() {
+            const texto = `🔥 Joguei o SHOW DO MILHÃO CRENTE!\nFiz ${placar} pontos jogando com o Pastor André Fernandes!\nConsegue bater meu recorde e ganhar a passagem pra Curionópolis?`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Show do Milhão Crente',
+                    text: texto
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(texto).then(() => {
+                    alert("Pontuação copiada! Agora é só colar no WhatsApp!");
+                }).catch(err => {
+                    alert("Erro ao copiar pontuação.");
+                });
+            }
         }
-
-        // Inicia o jogo
-        carregarPergunta();
     </script>
 </body>
 </html>
