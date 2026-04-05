@@ -378,7 +378,7 @@
             <div style="font-size: 12px; color: var(--dourado-gloria);">Pontuação Total:</div>
             <div id="pontuacao-final" style="font-size: 50px; color: var(--verde-avivamento); text-shadow: 2px 2px 0 #000; margin-bottom: 20px;">0</div>
             
-            <button class="btn-theme" style="width: 100%; margin-bottom: 15px;" onclick="compartilharPontuacao()">📲 DESAFIAR O G300 (ZAP)</button>
+            <button class="btn-theme" style="width: 100%; margin-bottom: 15px;" onclick="compartilharPontuacao()">📲 DESAFIAR O IRMÃOS(ÃS) (ZAP)</button>
             <button class="btn-help" style="padding: 15px; width: 100%; font-size: 12px;" onclick="location.reload()">VOLTAR AO MENU</button>
         </div>
 
@@ -677,13 +677,13 @@
             if(perguntaAtual >= 5) nivel = "JOVEM FORTE 🗡️";
             if(perguntaAtual >= 10 || placar > 50000) nivel = "CÍRCULO DE ORAÇÃO 🔥";
 
-            const texto = `🔥 Joguei o SHOW DO MILHÃO DA EBD!\n📖 Tema: ${temaEscolhidoNome}\n\n👨🏽 Pastor André mandou a palavra e eu fiz:\n🏆 ${placar.toLocaleString('pt-BR')} Pontos!\n📈 Nível Teológico: ${nivel}\n\nDuvido você do G300 ser mais rápido e ganhar a passagem pra Curionópolis!\n\n✈️ Jogue aqui: https://showdomilhaocrente.netlify.app/`;
+            const texto = `🔥 Joguei o SHOW DO MILHÃO DA EBD!\n📖 Tema: ${temaEscolhidoNome}\n\n👨🏽 Pastor André mandou a palavra e eu fiz:\n🏆 ${placar.toLocaleString('pt-BR')} Pontos!\n📈 Nível Teológico: ${nivel}\n\nDuvido você ser mais rápido e ganhar a passagem pra Curionópolis!\n\n✈️ Jogue aqui: https://showdomilhaocrente.netlify.app/`;
             
             if (navigator.share) {
                 navigator.share({ title: 'Show do Milhão EBD', text: texto }).catch(console.error);
             } else {
                 navigator.clipboard.writeText(texto).then(() => {
-                    alert("✅ O Texto foi copiado! Cole no grupo do G300 e desafie os irmãos!");
+                    alert("✅ O Texto foi copiado! Cole no grupo e desafie os irmãos!");
                 }).catch(err => {
                     alert("Erro ao copiar. :(");
                 });
