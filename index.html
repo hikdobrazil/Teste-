@@ -3,125 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show do Milhão Crente</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Show do Milhão Crente - O Avivamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* NOVA PALETA DE CORES DA IGREJA */
-            --marrom-fundo: #4e342e; /* Madeira profunda */
-            --marrom-painel: #5d4037; /* Púlpito e tábuas */
-            --dourado-brilhante: #ffd600; /* Luz e divino */
-            --dourado-soft: #ffc107; /* Ouro âmbar */
-            --vermelho-rubi: #8e0000; /* Sacrifício e vitrais */
-            --pergaminho: #ffecb3; /* Fundo para leitura */
-            --branco: #f5f5f5;
-            --preto: #000000;
+            /* PALETA ALEGRE E ENÉRGICA (IGREJA MÃE) */
+            --azul-congresso: #0044CC; /* Azul vibrante e alegre */
+            --azul-profundo: #002266;
+            --dourado-gloria: #FFD700;
+            --amarelo-sol: #FFE600;
+            --branco-paz: #FFFFFF;
+            --verde-avivamento: #00E676; /* Verde muito vibrante */
+            --vermelho-alerta: #FF1744;
+            --laranja-fogo: #FF9100;
         }
 
         body {
             font-family: 'Press Start 2P', cursive;
-            background-color: var(--marrom-fundo);
-            color: var(--dourado-brilhante);
+            background: radial-gradient(circle at center, var(--azul-congresso) 0%, var(--azul-profundo) 100%);
+            color: var(--branco-paz);
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         #game-wrapper {
             max-width: 800px;
-            margin: 0 auto;
-            border: 8px solid var(--dourado-brilhante);
-            background-color: var(--marrom-painel);
-            box-shadow: 0 0 25px var(--dourado-brilhante), inset 0 0 15px #000;
+            margin: 20px auto;
+            border: 8px solid var(--dourado-gloria);
+            background-color: rgba(0, 34, 102, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
             position: relative;
             min-height: 650px;
             display: flex;
             flex-direction: column;
-            justify-content: start; /* Organiza de cima pra baixo */
-            padding-top: 20px;
-            /* ADICIONANDO UM TOQUE DE VITRAL NAS BORDAS */
-            border-image: linear-gradient(to bottom, var(--dourado-brilhante), var(--vermelho-rubi), var(--dourado-soft)) 1;
+            justify-content: start;
+            padding: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .screen {
             display: none;
-            padding: 20px 30px;
-            animation: fadeIn 0.5s ease-in;
+            padding: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .screen.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* --- TELA INICIAL --- */
+        /* --- TELA INICIAL BOMBÁSTICA --- */
         .title-logo {
-            font-size: 32px;
-            color: var(--dourado-brilhante);
-            text-shadow: 4px 4px 0 #000;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            animation: pulse 1.5s infinite;
+            font-family: 'Montserrat', sans-serif; /* Fonte moderna e grossa para o título */
+            font-size: 45px;
+            font-weight: 800;
+            color: var(--dourado-gloria);
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0 var(--azul-profundo), 8px 8px 0px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            line-height: 1.1;
+            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); text-shadow: 4px 4px 0 #000; }
-            50% { transform: scale(1.03); text-shadow: 4px 4px 20px var(--dourado-brilhante); }
-            100% { transform: scale(1); text-shadow: 4px 4px 0 #000; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .sub-badge {
+            background-color: var(--vermelho-alerta);
+            color: var(--branco-paz);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 10px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(255,0,0,0.5);
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .btn-start, .btn-share {
-            background-color: var(--dourado-soft);
-            color: #000;
-            border: 4px solid var(--branco);
+            background: linear-gradient(to bottom, var(--amarelo-sol), var(--laranja-fogo));
+            color: var(--azul-profundo);
+            border: 4px solid var(--branco-paz);
+            border-radius: 15px;
             padding: 20px 40px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
-            margin-top: 40px;
-            transition: all 0.2s;
-            box-shadow: 5px 5px 0 #000;
+            margin-top: 30px;
+            transition: all 0.1s;
+            box-shadow: 0 8px 0 var(--laranja-fogo), 0 15px 20px rgba(0,0,0,0.4);
         }
 
-        .btn-start:hover, .btn-share:hover {
-            background-color: var(--dourado-brilhante);
-            transform: translate(-2px, -2px);
-            box-shadow: 7px 7px 0 #000;
+        .btn-start:active, .btn-share:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 var(--laranja-fogo);
         }
 
-        /* --- HUD (Placar e Tempo) --- */
+        /* --- HUD (Placar, Nível e Tempo) --- */
         .hud {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--preto);
-            padding: 10px 20px;
-            border-bottom: 4px solid var(--dourado-brilhante);
-            margin-top: -30px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 2px solid var(--dourado-gloria);
             margin-bottom: 20px;
         }
 
-        .score-display {
-            font-size: 14px;
-            color: var(--dourado-brilhante);
+        .score-box {
+            font-size: 12px;
+            color: var(--verde-avivamento);
+            text-shadow: 2px 2px 0 #000;
         }
 
         .timer-container {
-            width: 200px;
-            height: 20px;
-            border: 2px solid var(--branco);
-            background-color: #333;
+            width: 150px;
+            height: 25px;
+            border: 3px solid var(--branco-paz);
+            border-radius: 15px;
+            background-color: #222;
             position: relative;
+            overflow: hidden;
         }
 
         #timer-bar {
             height: 100%;
-            background-color: var(--dourado-brilhante);
+            background-color: var(--verde-avivamento);
             width: 100%;
             transition: width 1s linear, background-color 0.5s;
         }
@@ -131,130 +154,178 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 10px;
-            color: var(--branco);
-            text-shadow: 1px 1px 0 #000;
+            font-size: 12px;
+            color: var(--branco-paz);
+            text-shadow: 1px 1px 2px #000;
         }
 
-        /* --- MENSAGEM DO PASTOR (LAYOUT FOCADO NA LEITURA CALMA) --- */
+        /* --- MENSAGEM DO PASTOR (O PSICOLÓGICO) --- */
+        .host-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .host-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: var(--dourado-gloria);
+            border-radius: 50%;
+            border: 3px solid var(--branco-paz);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
         .host-box {
-            background-color: var(--pergaminho);
-            color: var(--preto); /* Fonte escura para leitura */
-            padding: 20px 25px;
-            border-radius: 10px;
-            border: 6px solid #000;
-            margin-bottom: 30px;
-            font-size: 14px;
+            background-color: var(--branco-paz);
+            color: var(--azul-profundo);
+            padding: 15px 20px;
+            border-radius: 15px 15px 15px 0;
+            border: 4px solid var(--dourado-gloria);
+            font-size: 12px;
             line-height: 1.6;
-            position: relative;
-            /* EFEITO DE BORDA ESTILO PIXEL ART */
-            border-image: linear-gradient(to right, #000, #333) 1;
-            /* CENTRALIZAÇÃO NA TELA */
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 90%;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            flex-grow: 1;
+            text-align: left;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
         }
 
         /* --- ÁREA DO QUIZ --- */
+        #question-label {
+            color: var(--dourado-gloria);
+            font-size: 10px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
         #question {
-            font-size: 16px;
-            margin: 20px 0;
-            color: var(--branco);
-            text-shadow: 2px 2px 0 #000;
-            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 10px 0 30px 0;
+            color: var(--branco-paz);
+            text-shadow: 2px 2px 4px #000;
         }
 
         .btn-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 30px;
-            max-width: 95%;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .btn-resp {
-            background-color: var(--marrom- painel);
-            color: var(--dourado-soft);
-            border: 2px solid var(--branco);
-            padding: 15px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--branco-paz);
+            border: 2px solid var(--dourado-gloria);
+            border-radius: 10px;
+            padding: 18px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
             cursor: pointer;
             text-align: left;
-            transition: 0.2s;
+            transition: all 0.2s;
             position: relative;
         }
 
         .btn-resp:hover:not(:disabled) {
-            background-color: var(--dourado-soft);
-            color: #000;
-            transform: scale(1.02);
-            box-shadow: 5px 5px 0 #000;
+            background-color: var(--dourado-gloria);
+            color: var(--azul-profundo);
+            transform: scale(1.02) translateX(10px);
         }
 
-        .btn-resp:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
+        /* ANIMAÇÃO DE SUSPENSE (Efeito Cassino) */
+        .btn-resp.suspense {
+            background-color: var(--laranja-fogo) !important;
+            color: var(--branco-paz) !important;
+            animation: suspenseBlink 0.2s infinite;
+        }
+
+        @keyframes suspenseBlink {
+            0% { opacity: 1; transform: scale(1.02); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.02); }
         }
 
         .btn-resp.correct {
-            background-color: #00c853 !important; /* Verde brilhante de acerto */
-            color: #000 !important;
-            animation: blink 0.3s 3;
+            background-color: var(--verde-avivamento) !important;
+            color: var(--azul-profundo) !important;
+            border-color: var(--branco-paz);
+            box-shadow: 0 0 20px var(--verde-avivamento);
+            animation: successPop 0.5s;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .btn-resp.wrong {
-            background-color: var(--vermelho-rubi) !important;
-            color: var(--branco) !important;
+            background-color: var(--vermelho-alerta) !important;
+            color: var(--branco-paz) !important;
+            animation: shakeX 0.5s;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        @keyframes shakeX {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
         }
 
         /* --- AJUDAS --- */
         .helps {
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            border-top: 2px dashed var(--dourado-brilhante);
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+            border-top: 2px solid rgba(255,255,255,0.2);
             padding-top: 20px;
         }
 
         .btn-help {
-            background-color: var(--vermelho-rubi);
-            color: var(--branco);
-            border: 2px solid var(--dourado-brilhante);
-            padding: 10px;
+            background-color: rgba(0,0,0,0.4);
+            color: var(--dourado-gloria);
+            border: 2px solid var(--dourado-gloria);
+            border-radius: 8px;
+            padding: 12px 5px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 9px;
+            font-size: 8px;
             cursor: pointer;
-            width: 30%;
+            flex: 1;
             transition: 0.2s;
+            text-transform: uppercase;
         }
 
         .btn-help:hover:not(:disabled) {
-            background-color: #d50000;
-            transform: translateY(-2px);
+            background-color: var(--dourado-gloria);
+            color: var(--azul-profundo);
+            transform: translateY(-3px);
         }
 
         .btn-help:disabled {
-            background-color: #333;
-            color: #666;
-            border-color: #555;
+            background-color: transparent;
+            color: #555;
+            border-color: #444;
             cursor: not-allowed;
+            text-decoration: line-through;
         }
 
-        /* --- TELA FINAL --- */
-        .final-score {
-            font-size: 40px;
-            color: var(--dourado-brilhante);
-            margin: 30px 0;
-            text-shadow: 3px 3px 0 #000;
+        /* EFEITO TENSÃO NA TELA */
+        .tela-tensao {
+            box-shadow: inset 0 0 100px var(--vermelho-alerta) !important;
+            animation: heartBeat 1s infinite;
+        }
+        @keyframes heartBeat {
+            0%, 100% { box-shadow: inset 0 0 50px var(--vermelho-alerta); }
+            50% { box-shadow: inset 0 0 120px var(--vermelho-alerta); }
         }
     </style>
 </head>
@@ -263,69 +334,100 @@
     <div id="game-wrapper">
         
         <div id="screen-start" class="screen active">
+            <div class="sub-badge">🔥 MAIS DE 5.000 IRMÃOS JÁ JOGARAM HOJE!</div>
             <div class="title-logo">SHOW DO MILHÃO<br>CRENTE</div>
-            <p style="color: var(--dourado-brilhante); font-size: 12px; margin-bottom: 40px;">Valendo uma passagem só de ida para Curionópolis!</p>
-            <p style="font-size: 10px; line-height: 1.8;">Responda rápido para ganhar MAIS PONTOS!<br>Você tem 30 segundos por pergunta.</p>
-            <button class="btn-start" onclick="iniciarJogo()">COMEÇAR JOGO</button>
+            <p style="color: var(--amarelo-sol); font-family: 'Montserrat'; font-size: 18px; font-weight: bold; margin-bottom: 20px;">Ano do Avivamento e do Fundamento!</p>
+            
+            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px dashed var(--dourado-gloria); font-size: 10px; line-height: 1.8;">
+                <span style="color: var(--verde-avivamento);">Sua passagem para Curionópolis JÁ ESTÁ COMPRADA!</span><br>
+                Responda as 15 perguntas para não deixar o inimigo roubar ela da sua mão!<br>
+                <span style="color: var(--vermelho-alerta);">Aviso: O tempo é curto e a glória é grande.</span>
+            </div>
+
+            <button class="btn-start" onclick="iniciarJogo()">PEGAR O VOO AGORA!</button>
         </div>
 
         <div id="screen-game" class="screen">
             <div class="hud">
-                <div class="score-display">PONTOS: <span id="placar">0</span></div>
+                <div class="score-box">CÓDIGOS: <span id="placar" style="font-size: 16px; color: var(--branco-paz);">0</span></div>
                 <div class="timer-container">
                     <div id="timer-bar"></div>
                     <div id="timer-text">30s</div>
                 </div>
             </div>
 
-            <div class="host-box" id="host-message">
-                Pastor André Fernandes: "A paz do Senhor, meu irmão! Glória a Deus por sua vida! Preparado pra subir o nível e ver se a Bíblia tá afiada? Vamos nessa!"
+            <div class="host-container">
+                <div class="host-avatar">👨🏽</div>
+                <div class="host-box" id="host-message">
+                    "A paz do Senhor, igreja! Olha pra mim... A passagem é sua! Só precisamos testar se o fundamento tá na rocha. Vamos começar!"
+                </div>
             </div>
 
+            <div id="question-label">NÍVEL: BEBÊ NA FÉ (Pergunta 1/15)</div>
             <div id="question">Carregando pergunta...</div>
             <div class="btn-container" id="options"></div>
 
             <div class="helps">
-                <button class="btn-help" id="btn-alunos" onclick="usarAlunos()">ALUNOS SOLUS SCRIPTURA</button>
-                <button class="btn-help" id="btn-pulo" onclick="usarPulo()">PULAR (<span id="qtd-pulos">3</span>x)</button>
-                <button class="btn-help" id="btn-marcus" onclick="usarMarcus()">MARCUS DA MÍDIA</button>
+                <button class="btn-help" id="btn-alunos" onclick="usarAlunos()">📚 Solus Scriptura</button>
+                <button class="btn-help" id="btn-pulo" onclick="usarPulo()">⏭️ Pular (<span id="qtd-pulos">3</span>)</button>
+                <button class="btn-help" id="btn-marcus" onclick="usarMarcus()">✂️ Marcus (Mídia)</button>
             </div>
         </div>
 
-        <div id="screen-end" class="screen">
-            <div class="title-logo" id="end-title">FIM DE JOGO!</div>
-            <p id="end-msg" style="font-size: 14px; line-height: 1.5;"></p>
-            <div class="final-score"><span id="pontuacao-final">0</span> PTS</div>
-            <p style="font-size: 10px; margin-bottom: 30px;" id="premio-final"></p>
+        <div id="screen-end" class="screen" style="text-align: center;">
+            <div class="host-avatar" style="margin: 0 auto 20px auto; width: 80px; height: 80px; font-size: 40px;">👨🏽</div>
+            <div class="title-logo" id="end-title" style="font-size: 35px;">FIM DE JOGO!</div>
+            <div style="background: var(--branco-paz); color: var(--azul-profundo); padding: 20px; border-radius: 15px; font-family: 'Montserrat'; font-weight: 800; font-size: 16px; margin-bottom: 20px;" id="end-msg"></div>
             
-            <button class="btn-share" onclick="compartilharPontuacao()">COMPARTILHAR SCORE</button>
+            <div style="font-size: 12px; color: var(--dourado-gloria);">Pontuação Total:</div>
+            <div id="pontuacao-final" style="font-size: 50px; color: var(--verde-avivamento); text-shadow: 2px 2px 0 #000; margin-bottom: 20px;">0</div>
+            
+            <button class="btn-share" onclick="compartilharPontuacao()">📲 TESTAR OS IRMÃOS (ZAP)</button>
             <br><br>
-            <button class="btn-start" style="font-size: 12px; padding: 15px;" onclick="location.reload()">JOGAR NOVAMENTE</button>
+            <button class="btn-start" style="font-size: 10px; padding: 15px 30px; background: transparent; border-color: var(--dourado-gloria); color: var(--dourado-gloria); box-shadow: none;" onclick="location.reload()">TENTAR DE NOVO</button>
         </div>
 
     </div>
 
     <script>
+        // Progressão Mestra: 15 Perguntas (Fácil -> Médio -> Difícil)
         const perguntas = [
-            { q: "Quem foi engolido por um grande peixe após tentar fugir do chamado de Deus?", options: ["Pedro", "Jonas", "Paulo", "João"], answer: 1 },
-            { q: "Quantos dias e noites choveu ininterruptamente durante o Dilúvio?", options: ["7", "12", "40", "100"], answer: 2 },
-            { q: "Quem o Apóstolo Paulo chama de 'meu verdadeiro filho na fé' nas cartas pastorais?", options: ["Timóteo", "Barnabé", "Silas", "Lucas"], answer: 0 },
-            { q: "Qual era a profissão de Mateus antes de ser chamado por Jesus?", options: ["Pescador", "Carpinteiro", "Cobrador de Impostos", "Fedor de tendas"], answer: 2 },
-            { q: "Quem cortou o cabelo de Sansão, fazendo-o perder sua força?", options: ["Raabe", "Dalila", "Ester", "Rute"], answer: 1 }
+            // FÁCIL (1 a 5)
+            { q: "Quem construiu a arca para escapar do grande dilúvio?", options: ["Abraão", "Moisés", "Noé", "Elias"], answer: 2 },
+            { q: "Qual o nome do jovem pastor de ovelhas que derrotou o gigante Golias?", options: ["Salomão", "Davi", "Saul", "Jônatas"], answer: 1 },
+            { q: "Quantos eram os apóstolos originais que andavam com Jesus?", options: ["10", "7", "12", "40"], answer: 2 },
+            { q: "Qual foi a cidade em que Jesus Cristo nasceu?", options: ["Nazaré", "Jerusalém", "Jericó", "Belém"], answer: 3 },
+            { q: "Qual é o primeiro livro da Bíblia Sagrada?", options: ["Êxodo", "Gênesis", "Levítico", "Salmos"], answer: 1 },
+            // MÉDIO (6 a 10)
+            { q: "Qual profeta foi arrebatado aos céus em um redemoinho com carruagens de fogo?", options: ["Eliseu", "Isaías", "Enoque", "Elias"], answer: 3 },
+            { q: "Quem cortou o cabelo de Sansão, fazendo-o perder sua força sobrenatural?", options: ["Dalila", "Raabe", "Jezabel", "Ester"], answer: 0 },
+            { q: "Qual o nome da Ilha onde o apóstolo João escreveu o livro de Apocalipse?", options: ["Chipre", "Creta", "Patmos", "Malta"], answer: 2 },
+            { q: "Jesus transformou água em vinho durante um casamento em qual cidade?", options: ["Cafarnaum", "Caná da Galileia", "Betânia", "Tiberíades"], answer: 1 },
+            { q: "Qual animal Deus fez falar para repreender o profeta Balaão?", options: ["Um leão", "Uma serpente", "Um corvo", "Uma jumenta"], answer: 3 },
+            // DIFÍCIL (11 a 15)
+            { q: "Quem o Apóstolo Paulo chama de 'meu verdadeiro filho na fé' nas cartas pastorais?", options: ["Timóteo", "Silas", "Tito", "Filemom"], answer: 0 },
+            { q: "No Antigo Testamento, quem era o avô do rei Davi?", options: ["Jessé", "Obede", "Boaz", "Salmon"], answer: 1 },
+            { q: "Qual era o nome do servo do sumo sacerdote que teve a orelha cortada por Pedro?", options: ["Malco", "Caifás", "Anás", "Barrabás"], answer: 0 },
+            { q: "O que significa a palavra 'Ebenézer', dita pelo profeta Samuel?", options: ["Deus conosco", "Até aqui nos ajudou o Senhor", "O Senhor é a minha bandeira", "Casa de Pão"], answer: 1 },
+            { q: "Qual destes livros da Bíblia NÃO contém a palavra 'Deus' em nenhum versículo?", options: ["Rute", "Cânticos", "Ester", "Eclesiastes"], answer: 2 }
         ];
 
         let perguntaAtual = 0;
         let pulosRestantes = 3;
         let alunosUsado = false;
         let marcusUsado = false;
-        
         let placar = 0;
         let tempoRestante = 30;
         let intervaloTimer;
-        let aguardandoProxima = false;
+        let emProcessamento = false; // Evita cliques duplos
 
-        const basePoints = 1000;
-        const timeBonusMultiplier = 50;
+        const falasPastor = [
+            "Pega esse código, igreja!",
+            "Receba essa sabedoria! Aleluia!",
+            "Fundamento puro! Você crê?!",
+            "É Ano de Avivamento, varão! Certa resposta!",
+            "Olha pra mim... O inimigo tentou, mas a passagem é sua!"
+        ];
 
         function trocarTela(idTela) {
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
@@ -341,14 +443,21 @@
             tempoRestante = 30;
             atualizarBarraTempo();
             clearInterval(intervaloTimer);
+            document.getElementById('game-wrapper').classList.remove('tela-tensao');
             
             intervaloTimer = setInterval(() => {
                 tempoRestante--;
                 atualizarBarraTempo();
 
+                // GATILHO DE TENSÃO - FLOW STATE
+                if (tempoRestante === 10) {
+                    document.getElementById('game-wrapper').classList.add('tela-tensao');
+                    document.getElementById('host-message').innerText = "Pastor André: 'Irmão, o tempo tá acabando! Fogo no altar, responde logo!'";
+                }
+
                 if (tempoRestante <= 0) {
                     clearInterval(intervaloTimer);
-                    finalizarJogo(false, "TEMPO ESGOTADO!");
+                    finalizarJogo(false, "O TEMPO ACABOU!");
                 }
             }, 1000);
         }
@@ -362,20 +471,28 @@
             texto.innerText = `${tempoRestante}s`;
 
             if (tempoRestante <= 10) {
-                barra.style.backgroundColor = 'var(--vermelho-rubi)';
+                barra.style.backgroundColor = 'var(--vermelho-alerta)';
             } else if (tempoRestante <= 20) {
-                barra.style.backgroundColor = 'var(--dourado-soft)';
+                barra.style.backgroundColor = 'var(--laranja-fogo)';
             } else {
-                barra.style.backgroundColor = 'var(--dourado-brilhante)';
+                barra.style.backgroundColor = 'var(--verde-avivamento)';
             }
         }
 
         function carregarPergunta() {
-            aguardandoProxima = false;
+            emProcessamento = false;
+            
             if (perguntaAtual >= perguntas.length) {
                 finalizarJogo(true, "ZEROU O JOGO!");
                 return;
             }
+
+            // Atualiza Label de Nível
+            let nivelTexto = "BEBÊ NA FÉ 🍼";
+            if(perguntaAtual >= 5 && perguntaAtual < 10) nivelTexto = "JOVEM FORTE 🗡️";
+            if(perguntaAtual >= 10) nivelTexto = "CÍRCULO DE ORAÇÃO 🔥";
+            
+            document.getElementById('question-label').innerText = `NÍVEL: ${nivelTexto} (Progresso: ${perguntaAtual + 1}/${perguntas.length})`;
 
             const p = perguntas[perguntaAtual];
             document.getElementById('question').innerText = p.q;
@@ -385,63 +502,94 @@
             p.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-resp';
-                btn.innerText = `${index + 1}) ${opt}`;
+                btn.innerText = `${index + 1}. ${opt}`;
                 btn.onclick = () => checarResposta(index, btn);
                 btn.id = `opt-${index}`;
                 optionsEl.appendChild(btn);
             });
 
-            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Direto de Parauapebas! Valeeeendo a passagem pra Curionópolis! Quem tá comigo?!"';
+            if (perguntaAtual === 0) {
+                document.getElementById('host-message').innerText = "Pastor André: 'Vamos aquecer! Pergunta fácil pra não ter desculpa de que perdeu a passagem logo de cara!'";
+            } else if (!document.getElementById('game-wrapper').classList.contains('tela-tensao')) {
+                document.getElementById('host-message').innerText = "Pastor André: 'Valendo! Cuidado com a pegadinha do inimigo, lê com calma mas não perde o tempo!'";
+            }
+            
             iniciarTimer();
         }
 
         function checarResposta(selectedIndex, btnElement) {
-            if (aguardandoProxima) return;
-            aguardandoProxima = true;
+            if (emProcessamento) return;
+            emProcessamento = true;
             clearInterval(intervaloTimer); // Para o relógio
+            document.getElementById('game-wrapper').classList.remove('tela-tensao');
 
+            // Trava os botões
             const botoes = document.querySelectorAll('.btn-resp');
             botoes.forEach(b => b.disabled = true);
 
-            const correta = perguntas[perguntaAtual].answer;
+            // DOPAMINA: Efeito de Suspense Cassino (Atraso de Recompensa)
+            btnElement.classList.add('suspense');
+            document.getElementById('host-message').innerText = "Pastor André: 'Eita glória... Você tem certeza absoluta disso, varão?! Cuidado...'";
 
-            if (selectedIndex === correta) {
-                btnElement.classList.add('correct');
-                
-                // Calcula pontuação: Pontos Base + (Segundos Restantes * Multiplicador)
-                const pontosGanhos = basePoints + (tempoRestante * timeBonusMultiplier);
-                placar += pontosGanhos;
-                document.getElementById('placar').innerText = placar;
+            setTimeout(() => {
+                btnElement.classList.remove('suspense');
+                const correta = perguntas[perguntaAtual].answer;
 
-                document.getElementById('host-message').innerText = `Pastor André Fernandes: "CEEEERTA RESPOSTA! Aleluia! Isso aí é fundamento puro! Já tô vendo a mala pronta pra Curionópolis!"`;
-                
-                perguntaAtual++;
-                setTimeout(carregarPergunta, 2500);
-            } else {
-                btnElement.classList.add('wrong');
-                document.getElementById(`opt-${correta}`).classList.add('correct'); // Mostra a certa
-                setTimeout(() => finalizarJogo(false, "RESPOSTA ERRADA!"), 2000);
-            }
+                if (selectedIndex === correta) {
+                    btnElement.classList.add('correct');
+                    
+                    // ESCALONAMENTO DE PONTOS (Progressão)
+                    let basePoints = 1000;
+                    if(perguntaAtual >= 5) basePoints = 3000;
+                    if(perguntaAtual >= 10) basePoints = 10000;
+
+                    const pontosGanhos = basePoints + (tempoRestante * 100);
+                    placar += pontosGanhos;
+                    
+                    animarPlacar(placar - pontosGanhos, placar);
+
+                    const falaAleatoria = falasPastor[Math.floor(Math.random() * falasPastor.length)];
+                    document.getElementById('host-message').innerText = `Pastor André: '${falaAleatoria} Ganhou mais ${pontosGanhos} pontos de glória!'`;
+                    
+                    perguntaAtual++;
+                    setTimeout(carregarPergunta, 3000);
+                } else {
+                    btnElement.classList.add('wrong');
+                    document.getElementById(`opt-${correta}`).classList.add('correct');
+                    document.getElementById('host-message').innerText = "Pastor André: 'Misericórdia! Quebrou o avivamento! Perdeu a passagem!'";
+                    setTimeout(() => finalizarJogo(false, "RESPOSTA ERRADA!"), 2500);
+                }
+            }, 2500); // 2.5 segundos de pura tensão e liberação de dopamina
+        }
+
+        // Função para rodar o número do placar estilo "Caça-níquel"
+        function animarPlacar(inicio, fim) {
+            let atual = inicio;
+            const step = Math.ceil((fim - inicio) / 20);
+            const timer = setInterval(() => {
+                atual += step;
+                if (atual >= fim) {
+                    atual = fim;
+                    clearInterval(timer);
+                }
+                document.getElementById('placar').innerText = atual.toLocaleString('pt-BR');
+            }, 50);
         }
 
         function usarAlunos() {
-            if (alunosUsado || aguardandoProxima) return;
+            if (alunosUsado || emProcessamento) return;
             alunosUsado = true;
             document.getElementById('btn-alunos').disabled = true;
-            
-            const correta = perguntas[perguntaAtual].answer;
-            const letra = correta + 1;
-            document.getElementById('host-message').innerText = `Pastor André Fernandes: "Os universitários mais abençoados do Brasil! Os Alunos da Solus Scriptura já deram a call: Confia na número ${letra}, meu irmão!"`;
+            const correta = perguntas[perguntaAtual].answer + 1;
+            document.getElementById('host-message').innerText = `Pastor André: 'Pausa tudo! Os teólogos da Solus Scriptura puxaram o grego original e disseram pra ir na OPÇÃO ${correta}!'`;
         }
 
         function usarPulo() {
-            if (pulosRestantes > 0 && !aguardandoProxima) {
+            if (pulosRestantes > 0 && !emProcessamento) {
                 pulosRestantes--;
                 document.getElementById('qtd-pulos').innerText = pulosRestantes;
-                document.getElementById('host-message').innerText = 'Pastor André Fernandes: "PULOU! É como diz o salmista: \'Pularia muros\'. Vamo pra próxima, mas ó, o tempo tá correndo!"';
-                
+                document.getElementById('host-message').innerText = "Pastor André: 'PULOU! Usou a sabedoria! Vamos pra próxima antes que esfrie!'";
                 if (pulosRestantes === 0) document.getElementById('btn-pulo').disabled = true;
-                
                 perguntaAtual++;
                 clearInterval(intervaloTimer);
                 setTimeout(carregarPergunta, 1500);
@@ -449,55 +597,68 @@
         }
 
         function usarMarcus() {
-            if (marcusUsado || aguardandoProxima) return;
+            if (marcusUsado || emProcessamento) return;
             marcusUsado = true;
             document.getElementById('btn-marcus').disabled = true;
 
             const correta = perguntas[perguntaAtual].answer;
             let erradas = [0, 1, 2, 3].filter(i => i !== correta);
-            erradas = erradas.sort(() => 0.5 - Math.random()).slice(0, 2); // Pega 2 erradas
+            erradas = erradas.sort(() => 0.5 - Math.random()).slice(0, 2);
 
             erradas.forEach(index => {
                 const btn = document.getElementById(`opt-${index}`);
                 if(btn) {
                     btn.disabled = true;
-                    btn.innerText = '--- ELIMINADA PELO MARCUS ---';
+                    btn.innerText = '❌ CORTADO NA EDIÇÃO ❌';
                     btn.style.opacity = '0.3';
                 }
             });
 
-            document.getElementById('host-message').innerText = 'Pastor André Fernandes: "Chama o Marcus da Mídia! Ele vai usar a tesoura da edição e arrancar essas erradas pra você! Ó glória!"';
+            document.getElementById('host-message').innerText = "Pastor André: 'Chama o Marcus da Mídia! Ele cortou 2 respostas erradas na mesa de edição! Agora ficou fácil!'";
         }
 
         function finalizarJogo(venceu, motivo) {
-            clearInterval(intervaloTimer);
+            document.getElementById('game-wrapper').classList.remove('tela-tensao');
             trocarTela('screen-end');
             
             document.getElementById('end-title').innerText = motivo;
-            document.getElementById('pontuacao-final').innerText = placar;
+            
+            // Efeito visual de contagem no final
+            let displayScore = 0;
+            const finalScoreEl = document.getElementById('pontuacao-final');
+            const scoreInterval = setInterval(() => {
+                displayScore += Math.ceil(placar / 30) || 1;
+                if(displayScore >= placar) {
+                    displayScore = placar;
+                    clearInterval(scoreInterval);
+                }
+                finalScoreEl.innerText = displayScore.toLocaleString('pt-BR');
+            }, 50);
 
             if (venceu) {
-                document.getElementById('end-msg').innerText = 'Pastor André Fernandes: "Z-E-R-O-U O JOGO! Arrume suas malas! ALELUIA! Sua passagem pra Curionópolis está carimbada! Deus abençoe demais a sua jornada!"';
-                document.getElementById('premio-final').innerText = 'Prêmio garantido: 1 Passagem só de ida para Curionópolis!';
+                document.getElementById('end-title').style.color = "var(--verde-avivamento)";
+                document.getElementById('end-msg').innerHTML = "Pastor André: 'ALELUIA! ZEROU O JOGO! O nível Círculo de Oração tá no sangue! Sua mala tá pronta, <b>a passagem pra Curionópolis é 100% SUA!</b> Desce pro aeroporto agora!'";
             } else {
-                document.getElementById('end-msg').innerText = 'Pastor André Fernandes: "Eita nois... Quebrou o avivamento! Mas calma, não desiste não! Volta pro culto de domingo pra estudar mais a Palavra!"';
-                document.getElementById('premio-final').innerText = 'Você perdeu a passagem para Curionópolis...';
+                document.getElementById('end-title').style.color = "var(--vermelho-alerta)";
+                let progresso = (perguntaAtual / perguntas.length) * 100;
+                document.getElementById('end-msg').innerHTML = `Pastor André: 'Faltou fundamento no finalzinho... Você completou ${progresso.toFixed(0)}% da jornada. Perdeu a passagem pra Curionópolis e vai ter que voltar pra Escola Dominical!'`;
             }
         }
 
         function compartilharPontuacao() {
-            const texto = `🔥 Joguei o SHOW DO MILHÃO CRENTE!\nFiz ${placar} pontos jogando com o Pastor André Fernandes!\nConsegue bater meu recorde e ganhar a passagem pra Curionópolis?\n\nJogue agora: https://showdomilhaocrente.netlify.app/`;
+            let nivel = "BEBÊ NA FÉ 🍼";
+            if(perguntaAtual >= 5) nivel = "JOVEM FORTE 🗡️";
+            if(perguntaAtual >= 10 || placar > 50000) nivel = "CÍRCULO DE ORAÇÃO 🔥";
+
+            const texto = `🔥 Joguei o SHOW DO MILHÃO CRENTE: O Avivamento!\n\n👨🏽 Pastor André mandou a palavra e eu fiz:\n🏆 ${placar.toLocaleString('pt-BR')} Pontos!\n📈 Meu Nível Teológico: ${nivel}\n\nDuvido você ser mais rápido e ganhar a passagem pra Curionópolis!\n\n✈️ Jogue aqui: https://showdomilhaocrente.netlify.app/`;
             
             if (navigator.share) {
-                navigator.share({
-                    title: 'Show do Milhão Crente',
-                    text: texto
-                }).catch(console.error);
+                navigator.share({ title: 'Show do Milhão Crente', text: texto }).catch(console.error);
             } else {
                 navigator.clipboard.writeText(texto).then(() => {
-                    alert("Pontuação copiada! Agora é só colar no WhatsApp!");
+                    alert("✅ O Texto foi copiado! Cole no grupo da Igreja no WhatsApp e veja quem bate seu recorde!");
                 }).catch(err => {
-                    alert("Erro ao copiar pontuação.");
+                    alert("Erro ao copiar. :(");
                 });
             }
         }
